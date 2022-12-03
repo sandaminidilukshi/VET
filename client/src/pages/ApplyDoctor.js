@@ -9,6 +9,7 @@ import { useNavigate } from "react-router-dom";
 import DoctorForm from "../components/DoctorForm";
 import moment from "moment";
 
+
 function ApplyDoctor() {
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state.user);

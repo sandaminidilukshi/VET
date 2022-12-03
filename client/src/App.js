@@ -16,7 +16,8 @@ import Profile from "./pages/Doctor/Profile";
 import BookAppointment from "./pages/BookAppointment";
 import Appointments from "./pages/Appointments";
 import DoctorAppointments from "./pages/Doctor/DoctorAppointments";
-
+import Records from "./pages/Doctor/Records";
+import ViewRecords from "./pages/Doctor/ViewRecords";
 function App() {
   const { loading } = useSelector((state) => state.alerts);
   return (
@@ -120,6 +121,28 @@ function App() {
             </ProtectedRoute>
           }
         />
+        <Route
+          path="doctor/records"
+          element={
+            <ProtectedRoute>
+              <Records />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="doctor/view_records"
+          element={
+            <ProtectedRoute>
+              <ViewRecords />
+            </ProtectedRoute>
+          }/>
+          <Route
+          path="user/view_records"
+          element={
+            <ProtectedRoute>
+              <ViewRecords />
+            </ProtectedRoute>
+          }/>
       </Routes>
     </BrowserRouter>
   );

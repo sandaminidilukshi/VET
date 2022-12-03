@@ -26,6 +26,11 @@ function Layout({ children }) {
       path: "/apply-doctor",
       icon: "ri-hospital-line",
     },
+    {
+      name: "View Records",
+      path: "/user/view_records",
+      icon: "ri-file-list-line",
+    },
   ];
 
   const doctorMenu = [
@@ -40,8 +45,13 @@ function Layout({ children }) {
       icon: "ri-file-list-line",
     },
     {
-      name: "Records",
+      name: "Create Records",
       path: "/doctor/records",
+      icon: "ri-file-list-line",
+    },
+    {
+      name: "View Records",
+      path: "/doctor/view_records",
       icon: "ri-file-list-line",
     },
     {
