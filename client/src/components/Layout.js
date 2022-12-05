@@ -26,11 +26,6 @@ function Layout({ children }) {
       path: "/apply-doctor",
       icon: "ri-hospital-line",
     },
-    // {
-    //   name: "View Records",
-    //   path: "/user/view_records",
-    //   icon: "ri-file-list-line",
-    // },
     {
       name: "Animal Profile",
       path: "/user/profile",

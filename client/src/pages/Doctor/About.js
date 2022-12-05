@@ -4,7 +4,7 @@ import Layout from '../../components/Layout'
 import { Card } from 'antd';
 const { Meta } = Card;
 
-function About() {
+function About({ doctor }) {
   return (<Layout>
     <div className='Cards'>
         <div className='container-fluid'>
