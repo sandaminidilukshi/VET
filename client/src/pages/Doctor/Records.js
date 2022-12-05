@@ -1,35 +1,109 @@
 import { Button, Col, Form, Input, Row, TimePicker } from "antd";
-import moment from "moment";
-import React from "react";
+import axios, { Axios } from "axios";
+import React, { useState } from "react";
+import toast from "react-hot-toast";
+import { useSelector } from "react-redux";
 import Layout from "../../components/Layout";
 
-function Records({ onFinish }) {
-  return (<Layout>
-    <Form
-      layout="vertical"
-      onFinish={onFinish}
+function Records() {
+
+  const { user } = useSelector((state) => state.user);
+  const [userName, setUserName] = useState('')
+  const [doctorName, setDoctorName] = useState('')
+  const [animalType, setAnimalType] = useState('')
+  const [animalName, setAnimalName] = useState('')
+  const [complaint, setComplaint] = useState('')
+  const [durationComplaints, setDurationComplaints] = useState('')  
+  const [finding, setFinding] = useState('')    
+  const [notes, setNotes] = useState('')
+  const [diagnosis, setdiagnosis] = useState('')
+  const [procedureConducted, setProcedureConducted] = useState('')
+  const [medicineName, setMedicineName] = useState('')  
+  const [morning, setMorning] = useState('')  
+  const [afternoon, setAfternoon] = useState('')
+  const [evening, setEvening] = useState('')
+  const [durationDosage, setDurationDosage] = useState('')  
+  const [advices, setAdvices] = useState('')
+
+  const submitHandler = async(e)=>{
+   
+    try {
+      const {data} = await axios.post('/api/prescription/save-prescription',
+     {
+        
+          "user": userName,
+            "doctor": user?.name,
+            "animalName": animalName,
+            "animaltype": animalType,
+            "chiefComplaints": {
+              complaint:complaint,
+              duration:durationComplaints,
+              finding:finding,
+
+            },
+            "notes": notes,
+            "diagnosis": diagnosis,
+            "procedureConducted": procedureConducted,
+            "medicines": [
+                {
+                  "medicineName":medicineName,
+                
+                  "dosage": {
+                    "morning": morning,
+                    "afternoon": afternoon,
+                    "evening": evening,
+                    
+                  "duration": durationDosage
+                  }}],
+            "advices": advices
+            
+      }, 
       
-    > 
-    <Row gutter={20}>
-        <Col span={8} xs={24} sm={24} lg={8}>
-        <div  style={{
-                            display: 'flex',
-                            alignItems: 'left',
-                            justifyContent: 'space-between',
-                            // marginTop:'2px',
-                        }} className="flex  ">
-          <label>
-            User ID
-          </label>
-         
-    <input mt-0
-      placeholder="Search"
-      className="space between "
-    ></input>
-    
-      <img src="https://static.vecteezy.com/system/resources/thumbnails/001/591/586/small/free-search-icon-free-vector.jpg" style={{ width: 40 , height: 40 }} className=" h-6 mt-1px" alt="search"></img>
-      </div>
-</Col></Row>
+      //   user:userName,
+      //   doctor:"doctor",
+      //   animalType,
+      //   animalName,
+      //   chiefComplaints:{
+      //     complaint:complaint,
+      //     duration:durationComplaints,
+      //     finding:finding
+      // },    
+      //   notes,
+      //   diagnosis,
+      //   procedureConducted,
+      //   medicines:[
+      //     {
+      //       medicineName:medicineName,
+      //              dosage:{
+      //            morning,
+      //            afternoon,
+      //            evening,
+      //            duration:durationDosage,
+      //       }
+
+            
+      //     }
+      //   ],
+      //   advices
+
+      {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      }
+      )
+      
+
+      //console.log(data)
+    } catch (err) {
+      toast.error(err);
+      
+    }
+  }
+
+  
+return (<Layout>
+    <Form layout="vertical" onFinish={submitHandler}> 
    
       <h1 className="card-title mt-3">Animal Record</h1>
       <Row gutter={20}>
@@ -37,30 +111,32 @@ function Records({ onFinish }) {
           <Form.Item
             required
             label="User Name"
-            name="User Name"
+            name="userName"
             rules={[{ required: true }]}
           >
-            <Input placeholder="User Name" />
+            <Input placeholder="User Name" onChange={(e)=>(setUserName(e.target.value))}/>
           </Form.Item>
+
         </Col>
+        
         <Col span={8} xs={24} sm={24} lg={8}>
           <Form.Item
             required
             label="Animal Type"
-            name="Animal Type"
+            name="animalType"
             rules={[{ required: true }]}
           >
-            <Input placeholder="Animal Type" />
+            <Input placeholder="Animal Type" onChange={(e)=>(setAnimalType(e.target.value))}/>
           </Form.Item>
         </Col>
         <Col span={8} xs={24} sm={24} lg={8}>
           <Form.Item
             required
             label="Animal Name"
-            name="Animal Name"
+            name="animalName"
             rules={[{ required: true }]}
           >
-            <Input placeholder="Animal Name" />
+            <Input placeholder="Animal Name" onChange={(e)=>(setAnimalName(e.target.value))}/>
           </Form.Item>
         </Col>
         </Row>
@@ -71,10 +147,10 @@ function Records({ onFinish }) {
           <Form.Item
             required
             label="Complaint"
-            name="Complaint"
+            name="complaint"
             rules={[{ required: true }]}
           >
-            <Input placeholder="Complaint" />
+            <Input placeholder="Complaint" onChange={(e)=>(setComplaint(e.target.value))} />
           </Form.Item>
         </Col>
        
@@ -82,20 +158,20 @@ function Records({ onFinish }) {
           <Form.Item
             required
             label="Duration"
-            name="Duration"
+            name="durationComplaints"
             rules={[{ required: true }]}
           >
-            <Input placeholder="Duration" />
+            <Input placeholder="Duration" onChange={(e)=>(setDurationComplaints(e.target.value))} />
           </Form.Item>
         </Col>
         <Col span={8} xs={24} sm={24} lg={8}>
           <Form.Item
             required
             label="Finding"
-            name="Finding"
+            name="finding"
             rules={[{ required: true }]}
           >
-            <Input placeholder="Finding" />
+            <Input placeholder="Finding" onChange={(e)=>(setFinding(e.target.value))}/>
           </Form.Item>
         </Col>
       </Row>
@@ -106,30 +182,30 @@ function Records({ onFinish }) {
           <Form.Item
             required
             label="Notes"
-            name="Notes"
+            name="notes"
             rules={[{ required: true }]}
           >
-            <Input placeholder="Notes" />
+            <Input placeholder="Notes" onChange={(e)=>(setNotes(e.target.value))}/>
           </Form.Item>
         </Col>
         <Col span={8} xs={24} sm={24} lg={8}>
           <Form.Item
             required
             label="Diagnosis"
-            name="Diagnosis"
+            name="diagnosis"
             rules={[{ required: true }]}
           >
-            <Input placeholder="Diagnosis"  />
+            <Input placeholder="Diagnosis"  onChange={(e)=>(setdiagnosis(e.target.value))}/>
           </Form.Item>
         </Col>
         <Col span={8} xs={24} sm={24} lg={8}>
           <Form.Item
             required
             label="Procedure Conducted"
-            name="Procedure Conducted"
+            name="procedureConducted"
             rules={[{ required: true }]}
           >
-            <Input placeholder="Procedure Conducted"  />
+            <Input placeholder="Procedure Conducted" onChange={(e)=>(setProcedureConducted(e.target.value))} />
           </Form.Item>
         </Col>
         </Row>
@@ -140,10 +216,10 @@ function Records({ onFinish }) {
           <Form.Item
             required
             label="Medicine Name"
-            name="Medicine Name"
+            name="medicineName"
             rules={[{ required: true }]}
           >
-            <Input placeholder="Medicine Name"  />
+            <Input placeholder="Medicine Name"  onChange={(e)=>(setMedicineName(e.target.value))}/>
           </Form.Item>
         </Col>
         </Row>
@@ -154,57 +230,57 @@ function Records({ onFinish }) {
           <Form.Item
             required
             label="Morning"
-            name="Morning"
+            name="morning"
             rules={[{ required: true }]}
           >
-            <Input placeholder="Morning"  />
+            <Input placeholder="Morning" onChange={(e)=>(setMorning(e.target.value))} />
           </Form.Item>
         </Col>
         <Col span={8} xs={24} sm={24} lg={8}>
           <Form.Item
             required
             label="Afternoon"
-            name="Afternoon"
+            name="afternoon"
             rules={[{ required: true }]}
           >
-            <Input placeholder="Afternoon"  />
+            <Input placeholder="Afternoon"  onChange={(e)=>(setAfternoon(e.target.value))}/>
           </Form.Item>
         </Col>
         <Col span={8} xs={24} sm={24} lg={8}>
           <Form.Item
             required
             label="Evening"
-            name="Evening"
+            name="evening"
             rules={[{ required: true }]}
           >
-            <Input placeholder="Evening"  />
+            <Input placeholder="Evening"  onChange={(e)=>(setEvening(e.target.value))}/>
           </Form.Item>
         </Col>
         <Col span={8} xs={24} sm={24} lg={8}>
           <Form.Item
             required
             label="Duration"
-            name="Duration"
+            name="durationDosage"
             rules={[{ required: true }]}
           >
-            <Input placeholder="Duration"  />
+            <Input placeholder="Duration" onChange={(e)=>(setDurationDosage(e.target.value))} />
           </Form.Item>
         </Col>
         <Col span={8} xs={24} sm={24} lg={8}>
           <Form.Item
             required
             label="Advices"
-            name="Advices"
+            name="advices"
             rules={[{ required: true }]}
           >
-            <Input placeholder="Advices"  />
+            <Input placeholder="Advices"  onChange={(e)=>(setAdvices(e.target.value))}/>
           </Form.Item>
         </Col>
         </Row>
 
 
       <div className="d-flex justify-content-end">
-        <Button className="primary-button" htmlType="submit">
+        <Button className="primary-button" htmlType="submit"  >
           SUBMIT
         </Button>
       </div>

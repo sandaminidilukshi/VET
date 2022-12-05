@@ -22,6 +22,7 @@ function Profile() {
         "/api/doctor/update-doctor-profile",
         {
           ...values,
+
           userId: user._id,
           timings: [
             moment(values.timings[0]).format("HH:mm"),
@@ -64,7 +65,9 @@ function Profile() {
 
       dispatch(hideLoading());
       if (response.data.success) {
+        console.log(response.data)
         setDoctor(response.data.data);
+        
       }
     } catch (error) {
       console.log(error);

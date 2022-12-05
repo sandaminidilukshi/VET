@@ -26,11 +26,16 @@ function Layout({ children }) {
       path: "/apply-doctor",
       icon: "ri-hospital-line",
     },
+    // {
+    //   name: "View Records",
+    //   path: "/user/view_records",
+    //   icon: "ri-file-list-line",
+    // },
     {
-      name: "View Records",
-      path: "/user/view_records",
-      icon: "ri-file-list-line",
-    },
+      name: "Animal Profile",
+      path: "/user/profile",
+      icon: "ri-user-line",
+    }
   ];
 
   const doctorMenu = [
@@ -57,6 +62,11 @@ function Layout({ children }) {
     {
       name: "Profile",
       path: `/doctor/profile/${user?._id}`,
+      icon: "ri-user-line",
+    },
+    {
+      name: "About",
+      path: "/doctor/about",
       icon: "ri-user-line",
     },
   ];

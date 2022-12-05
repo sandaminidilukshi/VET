@@ -53,7 +53,7 @@ function DoctorForm({ onFinish, initivalValues }) {
           <Form.Item
             required
             label="Email"
-            name="website"
+            name="email"
             rules={[{ required: true }]}
           >
             <Input placeholder="Email" />

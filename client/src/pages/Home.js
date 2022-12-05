@@ -18,6 +18,7 @@ function Home() {
       });
       dispatch(hideLoading())
       if (response.data.success) {
+        console.log(response.data.data)
         setDoctors(response.data.data);
       }
     } catch (error) {

@@ -1,38 +1,38 @@
 const mongoose = require("mongoose");
 const prescriptionSchema = new mongoose.Schema(
-    {
+    {    
+         user: {
+         type: String,
+         required: true,
+        },
         doctor: {
           type: String,
-          required: [true, "Please enter Doctor Name"],
+          required: [true, "Please enter Doctor Name"], 
         },
-        user: {
-          type: String,
-          required: [true, "Please enter user Number"],
-         
-        },
-        animal: {
+              
+        animalName: {
           type: String,
           required: [true, "Please enter animal type"],
          
         },
-        animal: {
+        animaltype: {
           type: String,
           required: [true, "Please enter animal name"],
          
         },
-        chiefComplaints: [
+        chiefComplaints: 
           {
             complaint: {
               type: String,
             },
             duration: {
-              type: Number,
+              type: String,
             },
             finding: {
               type: String,
             },
           },
-        ],
+        
         notes: {
           type: String,
         },
@@ -47,57 +47,46 @@ const prescriptionSchema = new mongoose.Schema(
             medicineName: {
               type: String,
             },
-            type: {
-              type: String,
-            },
+          
             dosage: {
               morning: {
-                quantity: {
-                  type: Number,
-                },
-                remark: {
+                
                   type: String,
-                },
+                
               },
               afternoon: {
-                quantity: {
-                  type: Number,
-                },
-                remark: {
+                
                   type: String,
-                },
+                
               },
               evening: {
-                quantity: {
-                  type: Number,
-                },
-                remark: {
+                
                   type: String,
                 },
-              },
-            },
+              
             duration: {
-              type: Number,
-            },
-            total: {
-              type: Number,
-            },
-          },
-        ],
-        investigations: [
-          {
-            investigation: {
               type: String,
-            },
-          },
-        ],
-        advices: [
+            }}}],
+        //     total: {
+        //       type: Number,
+        //     },
+        //   },
+        // ],
+        // investigations: [
+        //   {
+        //     investigation: {
+        //       type: String,
+        //     },
+        //   },
+        // ],
+        
+        advices: 
           {
-            advice: {
+           
               type: String,
-            },
+          
           },
-        ],
+     
       },
       { timestamps: true }
 
