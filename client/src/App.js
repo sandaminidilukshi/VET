@@ -20,6 +20,7 @@ import Records from "./pages/Doctor/Records";
 import ViewRecords from "./pages/Doctor/ViewRecords";
 import About from "./pages/Doctor/About";
 import DoctorCard from "./components/DoctorCard";
+import Dashboard from "./pages/Admin/Dashboard";
 function App() {
   const { loading } = useSelector((state) => state.alerts);
   return (
@@ -150,6 +151,13 @@ function App() {
           element={
             <ProtectedRoute>
               <DoctorCard />
+            </ProtectedRoute>
+          }/>
+          <Route
+          path="admin/dashboard"
+          element={
+            <ProtectedRoute>
+              <Dashboard />
             </ProtectedRoute>
           }/>
       </Routes>

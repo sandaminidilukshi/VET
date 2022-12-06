@@ -56,7 +56,7 @@ function DoctorCard() {
           <Row gutter={20} className="mt-5" align="middle">
             <Col span={8} sm={24} xs={24} lg={8}>
               <img
-                src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ-Jbn0qoyFW0TzvGXMBtCvxDyglmklBtQf2A&usqp=CAU"
+                src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcShywja5_zmRTiMg4EkJWXPQc11q9DECwmDqA&usqp=CAU"
                 alt=""
                 width="100%"
                 
@@ -64,8 +64,12 @@ function DoctorCard() {
             </Col>
             <Col span={8} sm={24} xs={24} lg={8}>
               <h1 className="normal-text">
-                <b>Timings :</b> {doctor.timings[0]} - {doctor.timings[1]}
+               <b>Specialization :</b>
+               {doctor.specialization}
               </h1>
+              <p>
+              <b>Timings :</b> {doctor.timings[0]} - {doctor.timings[1]}
+              </p>
               <p>
                 <b>Phone Number : </b>
                 {doctor.phoneNumber}
@@ -76,7 +80,7 @@ function DoctorCard() {
               </p>
               <p>
                 <b>Fee per Visit : </b>
-                {doctor.feePerCunsultation}
+                LKR.{doctor.feePerCunsultation}
               </p>
               <p>
                 <b>E-mail : </b>

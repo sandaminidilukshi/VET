@@ -73,6 +73,11 @@ function Layout({ children }) {
       icon: "ri-home-line",
     },
     {
+      name: "Dashboard",
+      path: "/admin/dashboard",
+      icon: "ri-home-line",
+    },
+    {
       name: "Users",
       path: "/admin/userslist",
       icon: "ri-user-line",

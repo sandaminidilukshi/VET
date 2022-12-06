@@ -54,7 +54,7 @@ function Doctor({ doctor }) {
       </p>
       <p>
         <b>Fee per Visit : </b>
-        {doctor.feePerCunsultation}
+        LKR.{doctor.feePerCunsultation}
       </p>
       <p>
         <b>Timings : </b>
