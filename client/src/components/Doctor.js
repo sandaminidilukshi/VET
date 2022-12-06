@@ -21,8 +21,8 @@ function Doctor({ doctor }) {
         {doctor.phoneNumber}
       </p>
       <p>
-        <b>Address : </b>
-        {doctor.address}
+        <b>Specialization : </b>
+        {doctor.specialization}
       </p>
       <p>
         <b>Fee per Visit : </b>
@@ -49,8 +49,8 @@ function Doctor({ doctor }) {
         {doctor.phoneNumber}
       </p>
       <p>
-        <b>Address : </b>
-        {doctor.address}
+        <b>Specialization : </b>
+        {doctor.specialization}
       </p>
       <p>
         <b>Fee per Visit : </b>
@@ -78,8 +78,8 @@ function Doctor({ doctor }) {
         {doctor.phoneNumber}
       </p>
       <p>
-        <b>Address : </b>
-        {doctor.address}
+        <b>Specialization : </b>
+        {doctor.specialization}
       </p>
       <p>
         <b>Fee per Visit : </b>

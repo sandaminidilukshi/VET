@@ -46,26 +46,34 @@ function BookAppointment() {
   const checkAvailability = async () => {
     try {
       dispatch(showLoading());
-      const response = await axios.post(
-        "/api/user/check-booking-avilability",
-        {
-          doctorId: params.doctorId,
-          date: date,
-          time: time,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
+      if(date && time && params.doctorId) {
+        const response = await axios.post(
+          "/api/user/check-booking-avilability",
+          {
+            doctorId: params.doctorId,
+            date: date,
+            time: time,
           },
-        }
-      );
-      dispatch(hideLoading());
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+          }
+        );
+
+        dispatch(hideLoading());
       if (response.data.success) {
         toast.success(response.data.message);
         setIsAvailable(true);
       } else {
         toast.error(response.data.message);
       }
+      } else {
+        dispatch(hideLoading());
+        toast.error("Not available");
+      }
+      
+      
     } catch (error) {
       toast.error("Error booking appointment");
       dispatch(hideLoading());

@@ -19,6 +19,7 @@ import DoctorAppointments from "./pages/Doctor/DoctorAppointments";
 import Records from "./pages/Doctor/Records";
 import ViewRecords from "./pages/Doctor/ViewRecords";
 import About from "./pages/Doctor/About";
+import DoctorCard from "./components/DoctorCard";
 function App() {
   const { loading } = useSelector((state) => state.alerts);
   return (
@@ -148,7 +149,7 @@ function App() {
           path="doctor/about"
           element={
             <ProtectedRoute>
-              <About />
+              <DoctorCard />
             </ProtectedRoute>
           }/>
       </Routes>
