@@ -244,6 +244,37 @@ router.post("/check-booking-avilability", authMiddleware, async (req, res) => {
     });
   }
 });
+router.get("/get-booking-avilability-by-date", authMiddleware, async (req, res) => {
+  try {
+    
+    const doctorId = req.body.doctorId;
+    const date = moment(req.body.date, "DD-MM-YYYY").toISOString();
+    const appointments = await Appointment.find({
+      doctorId,
+      date
+    
+    });
+    if (appointments.length > 0) {
+      return res.status(200).send({
+        message: "Booked appointments",
+        success: true,
+        data:appointments
+      });
+    } else {
+      return res.status(200).send({
+        message: "Appointments not booked",
+        success: true,
+      });
+    }
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({
+      message: "Error getting appointement information",
+      success: false,
+      error,
+    });
+  }
+});
 
 router.get("/get-appointments-by-user-id", authMiddleware, async (req, res) => {
   try {

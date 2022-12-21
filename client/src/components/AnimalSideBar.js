@@ -1,11 +1,11 @@
 import React from 'react';
-import { Breadcrumb, Layout, Menu, Space, theme } from 'antd';
+import { Breadcrumb, Col, Form, Input, Layout, Menu, Row, Space, theme } from 'antd';
 import { BookOutlined, ContainerOutlined, EditOutlined, PlusOutlined, SnippetsOutlined } from '@ant-design/icons';
-import { Route, Routes } from 'react-router-dom';
+import { Route, Routes, useNavigate } from 'react-router-dom';
 
-function AnimalSideBar(){
+function AnimalSideBar({ children }){
 const { Header, Content, Footer } = Layout;
-
+const navigate = useNavigate();
   return (
     <Layout>
       <Header
@@ -27,9 +27,12 @@ const { Header, Content, Footer } = Layout;
         />
         <Space>
         <Menu
+         onClick={({key}) => {
+            navigate(key)
+          }}
           theme="dark"
           mode="horizontal"
-          defaultSelectedKeys={['2']}
+          defaultSelectedKeys={['/profile/register']}
           items={[
             {label:"Register", key:"/profile/register", icon:<SnippetsOutlined />},
             {label:"Bookings", key:"/profile/bookings",icon:<BookOutlined />},
@@ -37,7 +40,7 @@ const { Header, Content, Footer } = Layout;
             {label:"Update", key:"/profile/update",icon:<EditOutlined />},
             {label:"Help Centre", key:"/profile/help",icon:<PlusOutlined />},
         ]} ></Menu>
-        
+        <Paths />
         </Space>
       </Header>
       <Content
@@ -53,16 +56,17 @@ const { Header, Content, Footer } = Layout;
         >
           <Breadcrumb.Item>Home</Breadcrumb.Item>
           <Breadcrumb.Item>Animal Profile</Breadcrumb.Item>
-          <Breadcrumb.Item>Tommy</Breadcrumb.Item>
+          {/* <Breadcrumb.Item>Tommy</Breadcrumb.Item> */}
         </Breadcrumb>
         <div
           style={{
-            padding: 24,
-            minHeight: 380,
-            
+            padding: 10,
+            minHeight: 500,
+
           }}
         >
-          Content
+          
+  {children}
         </div>
       </Content>
       <Footer
