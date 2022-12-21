@@ -21,6 +21,8 @@ import ViewRecords from "./pages/Doctor/ViewRecords";
 import About from "./pages/Doctor/About";
 import DoctorCard from "./components/DoctorCard";
 import Dashboard from "./pages/Admin/Dashboard";
+import AnimalProfile from "./pages/AnimalProfile";
+import SideBar from "./components/SideBar";
 function App() {
   const { loading } = useSelector((state) => state.alerts);
   return (
@@ -160,9 +162,25 @@ function App() {
               <Dashboard />
             </ProtectedRoute>
           }/>
+          <Route
+          path="/user/profile"
+          element={
+            <ProtectedRoute>
+              <AnimalProfile/>
+            </ProtectedRoute>
+          }/>
+          <Route
+          path="/profile/register"
+          element={
+            <ProtectedRoute>
+              <Register/>
+            </ProtectedRoute>
+          }/>
       </Routes>
     </BrowserRouter>
+    
   );
 }
+
 
 export default App;

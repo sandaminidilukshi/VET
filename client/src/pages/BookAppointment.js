@@ -149,7 +149,7 @@ function BookAppointment() {
               </p>
               <p>
                 <b>E-mail : </b>
-                {doctor.website}
+                {doctor.email}
               </p>
               <div className="d-flex flex-column pt-2 mt-2">
                 <DatePicker

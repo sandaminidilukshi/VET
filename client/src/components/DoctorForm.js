@@ -96,7 +96,7 @@ function DoctorForm({ onFinish, initivalValues }) {
         <Col span={8} xs={24} sm={24} lg={8}>
           <Form.Item
             required
-            label="Fee Per Cunsultation"
+            label="Fee Per Consultation"
             name="feePerCunsultation"
             rules={[{ required: true }]}
           >

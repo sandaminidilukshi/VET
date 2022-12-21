@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import Layout from "../components/Layout";
-import { Col, Row } from "antd";
+import { Calendar, Col, Row } from "antd";
 import Doctor from "../components/Doctor";
 import { useDispatch, useSelector } from "react-redux";
 import { showLoading, hideLoading } from "../redux/alertsSlice";
@@ -38,6 +38,7 @@ function Home() {
           </Col>
         ))}
       </Row>
+      <Calendar />
     </Layout>
   );
 }

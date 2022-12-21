@@ -93,6 +93,34 @@ function Layout({ children }) {
       icon: "ri-user-line",
     },
   ];
+  const animalMenu = [
+    {
+      name: "Register",
+      path: "/profile/register",
+      icon: "ri-home-line",
+    },
+    {
+      name: "Bookings",
+      path: "/profile/bookings",
+      icon: "ri-home-line",
+    },
+    {
+      name: "Records",
+      path: "/profile/records",
+      icon: "ri-user-line",
+    },
+    {
+      name: "Update",
+      path: "/profile/update",
+      icon: "ri-user-star-line",
+    },
+    {
+      name: "Help-Centre",
+      path: "/profile/help",
+      icon: "ri-user-line",
+    },
+  ]
+
 
   const menuToBeRendered = user?.isAdmin
     ? adminMenu
