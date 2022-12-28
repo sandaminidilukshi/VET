@@ -22,7 +22,11 @@ import About from "./pages/Doctor/About";
 import DoctorCard from "./components/DoctorCard";
 import Dashboard from "./pages/Admin/Dashboard";
 import AnimalProfile from "./pages/AnimalProfile";
-import SideBar from "./components/SideBar";
+import ViewAppointments from "./pages/ViewAppointments";
+import Bookings from "./pages/Bookings";
+import Update from "./pages/Update";
+import HelpCentre from "./pages/HelpCentre"
+
 function App() {
   const { loading } = useSelector((state) => state.alerts);
   return (
@@ -169,11 +173,32 @@ function App() {
               <AnimalProfile/>
             </ProtectedRoute>
           }/>
+           <Route
+          path="/profile/update"
+          element={
+            <ProtectedRoute>
+              <Update/>
+            </ProtectedRoute>
+          }/>
+          <Route
+          path="/profile/bookings"
+          element={
+            <ProtectedRoute>
+              <Bookings/>
+            </ProtectedRoute>
+          }/>
           <Route
           path="/profile/register"
           element={
             <ProtectedRoute>
-              <Register/>
+              <AnimalProfile/>
+            </ProtectedRoute>
+          }/>
+          <Route
+          path="/profile/help"
+          element={
+            <ProtectedRoute>
+              <HelpCentre/>
             </ProtectedRoute>
           }/>
       </Routes>

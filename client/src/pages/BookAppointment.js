@@ -1,4 +1,4 @@
-import { Button, Col, DatePicker, Form, Input, Row, TimePicker } from "antd";
+import { Button, Col, DatePicker, Form, Input, Row, Table, TimePicker } from "antd";
 import React, { useEffect, useState } from "react";
 import Layout from "../components/Layout";
 import { useDispatch, useSelector } from "react-redux";
@@ -8,8 +8,11 @@ import axios from "axios";
 import { Navigate, useNavigate, useParams } from "react-router-dom";
 import DoctorForm from "../components/DoctorForm";
 import moment from "moment";
+import ViewAppointments from "./ViewAppointments";
 
 function BookAppointment() {
+
+
   const [isAvailable, setIsAvailable] = useState(false);
   const navigate = useNavigate();
   const [date, setDate] = useState();
@@ -18,6 +21,39 @@ function BookAppointment() {
   const [doctor, setDoctor] = useState(null);
   const params = useParams();
   const dispatch = useDispatch();
+  const [appointment, setAppointment] = useState([]);
+ 
+  const getAppointmentData = async () => {
+    try {
+      
+      dispatch(showLoading());
+      const resposne = await axios.post("/api/user/get-booking-avilability-by-date",
+      {
+        doctorId: params.doctorId,
+        date: date,
+       },
+        {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
+      dispatch(hideLoading());
+      
+      if (resposne.data.success) {
+        if (resposne.data.data.length > 0){
+          const date = moment(resposne.data.data[0].time, "HH:mm").toISOString();
+          setAppointment(resposne.data.data);
+          console.log(resposne.data.data)
+        }
+        else{
+            setAppointment(resposne.data.data)       
+            console.log(resposne.data.data)  
+      }    
+      }
+    } catch (error) {
+      dispatch(hideLoading());
+    }
+  };
 
   const getDoctorData = async () => {
     try {
@@ -114,6 +150,52 @@ function BookAppointment() {
   useEffect(() => {
     getDoctorData();
   }, []);
+
+  useEffect(() => {
+    getAppointmentData()    
+  }, [date])
+  
+
+  const columns = [
+    {
+      title: "Time",
+      dataIndex: "time",
+      render: (text, record) => (
+        <div>
+          {/* <div>
+          {
+          moment(record.time).format("HH")==="04" ?
+            moment(record.time).format("HH:mm"): "ok"
+          }
+          </div>
+          <div>
+          {
+          moment(record.time).format("HH")==="05" ?
+            moment(record.time).format("HH:mm"):  "ok1"
+          }
+          </div>
+           */}
+           {moment(record.date).format("DD-MM-YYYY")}{" "}
+          {moment(record.time).format("HH:mm")}{"-"} 
+          {moment(record.time).add(1, "hours").format("HH:mm")}
+         
+        </div>
+      ),
+    },
+    {
+      title: "Status of booking",
+      dataIndex: "status",
+      render:
+      (text, record) => (
+        
+        
+      <span style={{color:"red"}}>{record.status}</span>
+      )
+    },    
+  ]
+ 
+  
+
   return (
     <Layout>
       {doctor && (
@@ -154,9 +236,11 @@ function BookAppointment() {
               <div className="d-flex flex-column pt-2 mt-2">
                 <DatePicker
                   format="DD-MM-YYYY"
+                  
                   onChange={(value) => {
                     setDate(moment(value).format("DD-MM-YYYY"));
                     setIsAvailable(false);
+                    getAppointmentData();
                   }}
                 />
                 <TimePicker
@@ -165,6 +249,7 @@ function BookAppointment() {
                   onChange={(value) => {
                     setIsAvailable(false);
                     setTime(moment(value).format("HH:mm"));
+                    //getAppointmentData()
                   }}
                 />
                 {!isAvailable && (
@@ -189,6 +274,10 @@ function BookAppointment() {
           </Row>
         </div>
       )}
+       <div>
+        <p>{}</p>
+   <Table columns={columns}  dataSource={appointment} />
+   </div>
     </Layout>
   );
 }

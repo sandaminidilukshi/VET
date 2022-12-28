@@ -45,6 +45,7 @@ function ApplyDoctor() {
       toast.error("Something went wrong");
     }
   };
+  
 
   return (
     <Layout>

@@ -244,7 +244,7 @@ router.post("/check-booking-avilability", authMiddleware, async (req, res) => {
     });
   }
 });
-router.get("/get-booking-avilability-by-date", authMiddleware, async (req, res) => {
+router.post("/get-booking-avilability-by-date", authMiddleware , async (req, res) => {
   try {
     
     const doctorId = req.body.doctorId;
@@ -260,12 +260,14 @@ router.get("/get-booking-avilability-by-date", authMiddleware, async (req, res) 
         success: true,
         data:appointments
       });
-    } else {
+    } else { 
+      if (appointments.length === 0) {
       return res.status(200).send({
         message: "Appointments not booked",
         success: true,
+        data:appointments
       });
-    }
+    }}
   } catch (error) {
     console.log(error);
     res.status(500).send({

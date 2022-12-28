@@ -7,7 +7,7 @@ import toast from "react-hot-toast";
 import { useSelector } from "react-redux";
  
  
- function AnimalRegistration(){
+ function UpdateAnimal(){
  
   const [name, setName] = useState('');
   const [gender, setGender] = useState('');
@@ -52,7 +52,7 @@ toast.success("Animal registered successfully")
       <Image 
    
     width="100%"
-    src="https://img.freepik.com/free-vector/different-pets-concept_52683-37940.jpg?w=2000"
+    src="https://zameenblog.s3.amazonaws.com/blog/wp-content/uploads/2020/07/cover-image-240720-b.jpg"
   />
       </Col>
       <Col span={12}>
@@ -115,28 +115,12 @@ toast.success("Animal registered successfully")
       </Row>
       <div className="d-flex justify-content-end">
         <Button className="primary-button" htmlType="submit">
-          SUBMIT
+          UPDATE
         </Button>
       </div>
       <br/>
       <hr/>
-      <div>
-        <h6>Instructions before registering the animals</h6>
-      <li>
-        <ul>
-          1.Select your animal's type.
-        </ul>
-        <ul>
-          2.Add details correctly in registration form.
-        </ul>
-        <ul>
-          3.Update your animal's details from time to time
-        </ul>
-        <ul>
-          
-        </ul>
-      </li>
-      </div>
+      
     </Form>
       
      
@@ -145,4 +129,4 @@ toast.success("Animal registered successfully")
     )
  }
 
-export default AnimalRegistration;
+export default UpdateAnimal;

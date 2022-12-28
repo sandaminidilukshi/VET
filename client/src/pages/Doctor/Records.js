@@ -59,33 +59,7 @@ function Records() {
             
       }, 
       
-      //   user:userName,
-      //   doctor:"doctor",
-      //   animalType,
-      //   animalName,
-      //   chiefComplaints:{
-      //     complaint:complaint,
-      //     duration:durationComplaints,
-      //     finding:finding
-      // },    
-      //   notes,
-      //   diagnosis,
-      //   procedureConducted,
-      //   medicines:[
-      //     {
-      //       medicineName:medicineName,
-      //              dosage:{
-      //            morning,
-      //            afternoon,
-      //            evening,
-      //            duration:durationDosage,
-      //       }
-
-            
-      //     }
-      //   ],
-      //   advices
-
+    
       {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,

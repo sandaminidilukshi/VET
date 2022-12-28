@@ -55,7 +55,7 @@ const navigate = useNavigate();
           }}
         >
           <Breadcrumb.Item>Home</Breadcrumb.Item>
-          <Breadcrumb.Item>Animal Profile</Breadcrumb.Item>
+          <Breadcrumb.Item>Animal Registration</Breadcrumb.Item>
           {/* <Breadcrumb.Item>Tommy</Breadcrumb.Item> */}
         </Breadcrumb>
         <div
