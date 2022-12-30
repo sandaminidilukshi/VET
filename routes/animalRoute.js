@@ -1,11 +1,8 @@
 const express = require("express");
 const router = express.Router();
-const Doctor = require("../models/doctorModel");
-const Prescription = require("../models/prescriptionModel")
 const authMiddleware = require("../middlewares/authMiddleware");
-const Appointment = require("../models/appointmentModel");
-const User = require("../models/userModel");
 const Animal = require("../models/animalModel")
+const User = require("../models/userModel");
 
 router.post("/save-animal", authMiddleware, async (req, res) => {
     try {
@@ -50,6 +47,21 @@ router.post("/save-animal", authMiddleware, async (req, res) => {
       });
     }
   });
+  router.post("/get-animal-info-by-user-id", authMiddleware, async (req, res) => {
+    try {
+      const animal = await Animal.findOne({ userId: req.body.userId });
+      res.status(200).send({
+        success: true,
+        message: "Animal info fetched successfully",
+        data: animal,
+      });
+    } catch (error) {
+      res
+        .status(500)
+        .send({ message: "Error getting animal info", success: false, error });
+    }
+  });
+  
   
 
   module.exports = router;

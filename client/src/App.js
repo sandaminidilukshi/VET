@@ -26,6 +26,8 @@ import ViewAppointments from "./pages/ViewAppointments";
 import Bookings from "./pages/Bookings";
 import Update from "./pages/Update";
 import HelpCentre from "./pages/HelpCentre"
+import AnimalsList from "./pages/Admin/AnimalsList";
+import AnimalCard from "./components/AnimalCard";
 
 function App() {
   const { loading } = useSelector((state) => state.alerts);
@@ -199,6 +201,20 @@ function App() {
           element={
             <ProtectedRoute>
               <HelpCentre/>
+            </ProtectedRoute>
+          }/>
+          <Route
+          path="/admin/animalslist"
+          element={
+            <ProtectedRoute>
+              <AnimalsList/>
+            </ProtectedRoute>
+          }/> 
+           <Route
+          path="/profile/animalprofile"
+          element={
+            <ProtectedRoute>
+              <AnimalCard/>
             </ProtectedRoute>
           }/>
       </Routes>

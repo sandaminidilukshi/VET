@@ -32,10 +32,10 @@ const navigate = useNavigate();
           }}
           theme="dark"
           mode="horizontal"
-          defaultSelectedKeys={['/profile/register']}
+          defaultSelectedKeys={''}
           items={[
             {label:"Register", key:"/profile/register", icon:<SnippetsOutlined />},
-            {label:"Bookings", key:"/profile/bookings",icon:<BookOutlined />},
+            {label:"Animal Profile", key:"/profile/animalprofile",icon:<BookOutlined />},
             {label:"Records", key:"/profile/records",icon:<ContainerOutlined />},
             {label:"Update", key:"/profile/update",icon:<EditOutlined />},
             {label:"Help Centre", key:"/profile/help",icon:<PlusOutlined />},
@@ -54,8 +54,8 @@ const navigate = useNavigate();
             margin: '16px 0',
           }}
         >
-          <Breadcrumb.Item>Home</Breadcrumb.Item>
-          <Breadcrumb.Item>Animal Registration</Breadcrumb.Item>
+          <Breadcrumb.Item>Animal Profile</Breadcrumb.Item>
+          {/* <Breadcrumb.Item>Animal Registration</Breadcrumb.Item> */}
           {/* <Breadcrumb.Item>Tommy</Breadcrumb.Item> */}
         </Breadcrumb>
         <div
@@ -82,7 +82,7 @@ const navigate = useNavigate();
     return <div>
       <Routes>
         <Route path="/profile/register" element={<div>Register</div>}></Route>
-        <Route path="/profile/bookings" element={<div>Bookings</div>}></Route>
+        <Route path="/profile/animalprofile" element={<div>Bookings</div>}></Route>
         <Route path="/profile/records" element={<div>Records</div>}></Route>
         <Route path="/profile/update" element={<div>Update</div>}></Route>
         <Route path="/profile/help" element={<div>Help</div>}></Route>

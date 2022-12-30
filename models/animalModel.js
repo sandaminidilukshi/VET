@@ -5,6 +5,7 @@ const animalSchema = new mongoose.Schema(
          type: String,
          required: true,
         },
+        
         gender: {
           type: String,
           required: [true, "Please enter gender"], 

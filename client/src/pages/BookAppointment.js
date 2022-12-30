@@ -187,9 +187,9 @@ function BookAppointment() {
       dataIndex: "status",
       render:
       (text, record) => (
+        // {record.status} 
         
-        
-      <span style={{color:"red"}}>{record.status}</span>
+      <span style={{color:"red"}}>Booked</span>
       )
     },    
   ]

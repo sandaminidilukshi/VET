@@ -83,6 +83,11 @@ function Layout({ children }) {
       icon: "ri-user-line",
     },
     {
+      name: "Animals",
+      path: "/admin/animalslist",
+      icon: "ri-user-line",
+    },
+    {
       name: "Doctors",
       path: "/admin/doctorslist",
       icon: "ri-user-star-line",
