@@ -4,7 +4,7 @@ import Help from '../components/Help'
 function AnimalProfile() {
   return (
   <AnimalSideBar>
-    
+    <Help />
   </AnimalSideBar>
   )
 }

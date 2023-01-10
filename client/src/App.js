@@ -217,6 +217,13 @@ function App() {
               <AnimalCard/>
             </ProtectedRoute>
           }/>
+          <Route
+          path="/profile/help"
+          element={
+            <ProtectedRoute>
+              <HelpCentre/>
+            </ProtectedRoute>
+          }/>
       </Routes>
     </BrowserRouter>
     
