@@ -30,33 +30,33 @@ const userSchema = new mongoose.Schema(
       type: Array,
       default: [],
     },
-    // animals:[{
-    //   animalName: {
-    //     type: String,
-    //     required: false,
-    //    },
+    animals:[{
+      animalName: {
+        type: String,
+        required: false,
+       },
        
-    //    gender: {
-    //      type: String,
-    //      required: [false, "Please enter gender"], 
-    //    },
+       gender: {
+         type: String,
+         required: [false, "Please enter gender"], 
+       },
              
-    //    reproduction: {
-    //      type: String,
-    //      required: [false, "Please enter reproduction status"],
+       reproduction: {
+         type: String,
+         required: [false, "Please enter reproduction status"],
         
-    //    },
-    //    weight: {
-    //      type: String,
-    //      required: [false, "Please enter weight"],
+       },
+       weight: {
+         type: String,
+         required: [false, "Please enter weight"],
         
-    //    },
+       },
       
-    //    animalType: {
-    //      type: String,
-    //      required: [false, "Please enter animal type"]
-    //    }}
-    // ],
+       animalType: {
+         type: String,
+         required: [false, "Please enter animal type"]
+       }}
+    ],
  
   
   },

@@ -24,7 +24,8 @@ router.post("/save-prescription", authMiddleware, async (req, res) => {
       advices: req.body.advices,
 
     });
-    await newPrescription.save();  
+    await newPrescription.save();
+      
     res.status(200).send({
       success: true,
       message: "Record created successfully",

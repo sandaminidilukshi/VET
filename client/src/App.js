@@ -25,9 +25,11 @@ import AnimalProfile from "./pages/AnimalProfile";
 import ViewAppointments from "./pages/ViewAppointments";
 import Bookings from "./pages/Bookings";
 import Update from "./pages/Update";
-import HelpCentre from "./pages/HelpCentre"
+import HelpCentre from "./pages/HelpCentre";
 import AnimalsList from "./pages/Admin/AnimalsList";
 import AnimalCard from "./components/AnimalCard";
+import ViewHelp from "./pages/Doctor/ViewHelp";
+import ViewReply from "./pages/Doctor/ViewReply";
 
 function App() {
   const { loading } = useSelector((state) => state.alerts);
@@ -146,89 +148,107 @@ function App() {
             <ProtectedRoute>
               <ViewRecords />
             </ProtectedRoute>
-          }/>
-          <Route
+          }
+        />
+        <Route
           path="user/view_records"
           element={
             <ProtectedRoute>
               <ViewRecords />
             </ProtectedRoute>
-          }/>
-          <Route
+          }
+        />
+        <Route
           path="doctor/about"
           element={
             <ProtectedRoute>
               <DoctorCard />
             </ProtectedRoute>
-          }/>
-          <Route
+          }
+        />
+        <Route
           path="admin/dashboard"
           element={
             <ProtectedRoute>
               <Dashboard />
             </ProtectedRoute>
-          }/>
-          <Route
+          }
+        />
+        <Route
           path="/user/profile"
           element={
             <ProtectedRoute>
-              <AnimalProfile/>
+              <AnimalProfile />
             </ProtectedRoute>
-          }/>
-           <Route
+          }
+        />
+        <Route
           path="/profile/update"
           element={
             <ProtectedRoute>
-              <Update/>
+              <Update />
             </ProtectedRoute>
-          }/>
-          <Route
+          }
+        />
+        <Route
           path="/profile/bookings"
           element={
             <ProtectedRoute>
-              <Bookings/>
+              <Bookings />
             </ProtectedRoute>
-          }/>
-          <Route
+          }
+        />
+        <Route
           path="/profile/register"
           element={
             <ProtectedRoute>
-              <AnimalProfile/>
+              <AnimalProfile />
             </ProtectedRoute>
-          }/>
-          <Route
+          }
+        />
+        <Route
           path="/profile/help"
           element={
             <ProtectedRoute>
-              <HelpCentre/>
+              <HelpCentre />
             </ProtectedRoute>
-          }/>
-          <Route
+          }
+        />
+        <Route
           path="/admin/animalslist"
           element={
             <ProtectedRoute>
-              <AnimalsList/>
+              <AnimalsList />
             </ProtectedRoute>
-          }/> 
-           <Route
+          }
+        />
+        <Route
           path="/profile/animalprofile"
           element={
             <ProtectedRoute>
-              <AnimalCard/>
+              <AnimalCard />
             </ProtectedRoute>
-          }/>
-          <Route
+          }
+        />
+        <Route
           path="/profile/help"
           element={
             <ProtectedRoute>
-              <HelpCentre/>
+              <HelpCentre />
             </ProtectedRoute>
-          }/>
+          }
+        />
+        <Route
+          path="/doctor/help"
+          element={
+            <ProtectedRoute>
+              <ViewHelp />
+            </ProtectedRoute>
+          }
+        />
       </Routes>
     </BrowserRouter>
-    
   );
 }
-
 
 export default App;

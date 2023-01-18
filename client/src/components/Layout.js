@@ -64,6 +64,11 @@ function Layout({ children }) {
       path: "/doctor/about",
       icon: "ri-user-line",
     },
+    {
+      name: "Help",
+      path: "/doctor/help",
+      icon: "ri-user-line",
+    }
   ];
 
   const adminMenu = [
@@ -82,6 +87,7 @@ function Layout({ children }) {
       path: "/admin/userslist",
       icon: "ri-user-line",
     },
+    
     {
       name: "Animals",
       path: "/admin/animalslist",
