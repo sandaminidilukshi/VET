@@ -1,4 +1,4 @@
-import { Button, Col, Form, Input, Row, TimePicker } from "antd";
+import { Button, Col, Form, Image, Input, Row, TimePicker } from "antd";
 import React from "react";
 import axios, { Axios } from "axios";
 import { useState } from "react";
@@ -11,17 +11,17 @@ function Help({ onFinish }) {
   const [emailAddress, setEmailAddress] = useState("");
   const [issue, setIssue] = useState("");
   const [need, setNeed] = useState("");
-
+  const { user } = useSelector((state) => state.user);
   const submitHandler = async (e) => {
     try {
       const { data } = await axios.post(
         "/api/help/save-help-request",
-        {
+        { userId: user._id,
           animalTypeHelp: animalTypeHelp,
           phone: phone,
-          emailAddress: emailAddress,
           issue: issue,
           need: need,
+          reply:""
         },
 
         {
@@ -31,16 +31,26 @@ function Help({ onFinish }) {
         }
       );
 
-      toast.success("Animal registered successfully");
+      toast.success("Help request sent successfully");
     } catch (err) {
       toast.error(err);
     }
   };
   return (
-    <Form layout="vertical" onFinish={submitHandler}>
+    <Row>
+      <Col span={12}>
+      <Image 
+   
+    width="100%"
+    height="100%"
+    src="https://cdn.pixabay.com/photo/2017/09/25/13/12/puppy-2785074__340.jpg"
+  />
+      </Col>
+      <Col span={12}>
+    <Form layout="vertical" style={{marginLeft:"20px"}} onFinish={submitHandler}>
       <h1 className="card-title mt-3">Help Center</h1>
       <Row gutter={20}>
-        <Col span={8} xs={24} sm={24} lg={8}>
+        <Col span={24} xs={24} sm={24} lg={12}>
           <Form.Item
             required
             label="Animal Type"
@@ -54,7 +64,7 @@ function Help({ onFinish }) {
           </Form.Item>
         </Col>
 
-        <Col span={8} xs={24} sm={24} lg={8}>
+        <Col span={24} xs={24} sm={24} lg={12}>
           <Form.Item required label="Phone Number" name="phone">
             <Input
               placeholder="phone"
@@ -62,7 +72,7 @@ function Help({ onFinish }) {
             />
           </Form.Item>
         </Col>
-        <Col span={8} xs={24} sm={24} lg={8}>
+        {/* <Col span={8} xs={24} sm={24} lg={8}>
           <Form.Item
             required
             label="Email Address"
@@ -74,8 +84,8 @@ function Help({ onFinish }) {
               onChange={(e) => setEmailAddress(e.target.value)}
             />
           </Form.Item>
-        </Col>
-        <Col span={8} xs={24} sm={24} lg={8}>
+        </Col> */}
+        <Col span={24} xs={24} sm={24} lg={12}>
           <Form.Item required label="Issue" name="issue">
             <Input
               placeholder="Issue"
@@ -83,7 +93,7 @@ function Help({ onFinish }) {
             />
           </Form.Item>
         </Col>
-        <Col span={8} xs={24} sm={24} lg={8}>
+        <Col span={24} xs={24} sm={24} lg={12}>
           <Form.Item required label="Need" name="need">
             <Input
               placeholder="Need"
@@ -103,7 +113,10 @@ function Help({ onFinish }) {
           SUBMIT
         </Button>
       </div>
+      
     </Form>
+    </Col>
+    </Row>
   );
 }
 

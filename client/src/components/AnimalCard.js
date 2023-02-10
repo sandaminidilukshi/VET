@@ -22,6 +22,7 @@ function AnimalCard() {
         "/api/animal/get-animal-info-by-user-id",
         {
           userId: params.userId,
+          
         },
         {
           headers: {

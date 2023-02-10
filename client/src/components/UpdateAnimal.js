@@ -52,6 +52,7 @@ toast.success("Animal registered successfully")
       <Image 
    
     width="100%"
+    height="100%"
     src="https://zameenblog.s3.amazonaws.com/blog/wp-content/uploads/2020/07/cover-image-240720-b.jpg"
   />
       </Col>

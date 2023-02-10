@@ -21,7 +21,7 @@ function ViewReply() {
       const response = await axios.post(
         "/api/doctor/get-help-info-by-user-id",
         {
-          userId: params.userId,
+          userId: user._id,
         },
         {
           headers: {

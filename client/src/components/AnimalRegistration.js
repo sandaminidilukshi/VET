@@ -41,6 +41,7 @@ function AnimalRegistration() {
       <Col span={12}>
         <Image
           width="100%"
+          height="100%"
           src="https://img.freepik.com/free-vector/different-pets-concept_52683-37940.jpg?w=2000"
         />
       </Col>

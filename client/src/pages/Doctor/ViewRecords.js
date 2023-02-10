@@ -18,6 +18,7 @@ function ViewRecords() {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
       });
+      
       dispatch(hideLoading());
       
       if (resposne.data.success) {

@@ -1,7 +1,11 @@
 const mongoose = require("mongoose");
 const helpSchema = new mongoose.Schema(
   {
-    userID: {
+    userId: {
+      type: String,
+      required: false,
+    },
+    doctorId: {
       type: String,
       required: false,
     },
@@ -16,10 +20,10 @@ const helpSchema = new mongoose.Schema(
       required: false,
     },
 
-    emailAddress: {
-      type: String,
-      required: false,
-    },
+    // emailAddress: {
+    //   type: String,
+    //   required: false,
+    // },
     issue: {
       type: String,
       required: false,

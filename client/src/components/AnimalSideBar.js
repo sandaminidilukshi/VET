@@ -16,7 +16,7 @@ const navigate = useNavigate();
           width: '100%',
         }}
       >
-        <div
+        {/* <div
           style={{
             float: 'left',
             width: 120,
@@ -24,7 +24,7 @@ const navigate = useNavigate();
             margin: '16px 24px 16px 0',
             background: 'rgba(255, 255, 255, 0.2)',
           }}
-        />
+        /> */}
         <Space>
         <Menu
          onClick={({key}) => {
@@ -34,9 +34,9 @@ const navigate = useNavigate();
           mode="horizontal"
           defaultSelectedKeys={''}
           items={[
+            {label:"Home", key:"/",icon:<ContainerOutlined />},
             {label:"Register", key:"/profile/register", icon:<SnippetsOutlined />},
             {label:"Animal Profile", key:"/profile/animalprofile",icon:<BookOutlined />},
-            {label:"Records", key:"/profile/records",icon:<ContainerOutlined />},
             {label:"Update", key:"/profile/update",icon:<EditOutlined />},
             {label:"Help Centre", key:"/profile/help",icon:<PlusOutlined />},
         ]} ></Menu>
@@ -83,7 +83,7 @@ const navigate = useNavigate();
       <Routes>
         <Route path="/profile/register" element={<div>Register</div>}></Route>
         <Route path="/profile/animalprofile" element={<div>Bookings</div>}></Route>
-        <Route path="/profile/records" element={<div>Records</div>}></Route>
+        <Route path="/" element={<div>Records</div>}></Route>
         <Route path="/profile/update" element={<div>Update</div>}></Route>
         <Route path="/profile/help" element={<div>Help</div>}></Route>
       </Routes>

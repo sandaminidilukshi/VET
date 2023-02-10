@@ -56,7 +56,7 @@ function DoctorCard() {
           <Row gutter={20} className="mt-5" align="middle">
             <Col span={8} sm={24} xs={24} lg={8}>
               <img
-                src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcShywja5_zmRTiMg4EkJWXPQc11q9DECwmDqA&usqp=CAU"
+                src="https://thumbs.dreamstime.com/b/veterinarian-surrounded-home-pets-vector-cartoon-style-illustration-happy-veterinarian-doctor-character-surrounded-113886484.jpg"
                 alt=""
                 width="100%"
                 
