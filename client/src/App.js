@@ -29,8 +29,9 @@ import HelpCentre from "./pages/HelpCentre";
 import AnimalsList from "./pages/Admin/AnimalsList";
 import AnimalCard from "./components/AnimalCard";
 import ViewHelp from "./pages/Doctor/ViewHelp";
-import ViewReply from "./pages/Doctor/ViewReply";
-
+import HelpNotifications from "./components/HelpNotifications";
+import AppointmentsList from "./pages/Admin/AppointmentsList"
+import HelpView from "./components/HelpView";
 function App() {
   const { loading } = useSelector((state) => state.alerts);
   return (
@@ -87,6 +88,14 @@ function App() {
           element={
             <ProtectedRoute>
               <Userslist />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/admin/appointments"
+          element={
+            <ProtectedRoute>
+              <AppointmentsList/>
             </ProtectedRoute>
           }
         />
@@ -243,6 +252,14 @@ function App() {
           element={
             <ProtectedRoute>
               <ViewHelp />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/profile/notifications"
+          element={
+            <ProtectedRoute>
+              <HelpView />
             </ProtectedRoute>
           }
         />

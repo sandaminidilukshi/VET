@@ -1,17 +1,23 @@
 import { Button, Col, Form, Image, Input, Row, TimePicker } from "antd";
-import React from "react";
+import React, { useEffect } from "react";
 import axios, { Axios } from "axios";
 import { useState } from "react";
 import toast from "react-hot-toast";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+
 
 function Help({ onFinish }) {
+  
+ const [reply, setReply] = useState("")
+  const dispatch = useDispatch();
   const [animalTypeHelp, setAnimalTypeHelp] = useState("");
   const [phone, setPhone] = useState("");
-  const [emailAddress, setEmailAddress] = useState("");
   const [issue, setIssue] = useState("");
   const [need, setNeed] = useState("");
   const { user } = useSelector((state) => state.user);
+
+  const [form] = Form.useForm();
+
   const submitHandler = async (e) => {
     try {
       const { data } = await axios.post(
@@ -35,7 +41,17 @@ function Help({ onFinish }) {
     } catch (err) {
       toast.error(err);
     }
+    
+    form.resetFields();
+
   };
+
+
+  // useEffect(() => {
+  //   submitHandler();
+  // }, []);
+
+
   return (
     <Row>
       <Col span={12}>
@@ -47,7 +63,7 @@ function Help({ onFinish }) {
   />
       </Col>
       <Col span={12}>
-    <Form layout="vertical" style={{marginLeft:"20px"}} onFinish={submitHandler}>
+    <Form layout="vertical" style={{marginLeft:"20px"}} onFinish={submitHandler} form ={form }>
       <h1 className="card-title mt-3">Help Center</h1>
       <Row gutter={20}>
         <Col span={24} xs={24} sm={24} lg={12}>
@@ -58,6 +74,7 @@ function Help({ onFinish }) {
             rules={[{ required: true }]}
           >
             <Input
+              
               placeholder="Animal Type"
               onChange={(e) => setAnimalTypeHelp(e.target.value)}
             />
@@ -65,28 +82,21 @@ function Help({ onFinish }) {
         </Col>
 
         <Col span={24} xs={24} sm={24} lg={12}>
-          <Form.Item required label="Phone Number" name="phone">
+          <Form.Item required 
+          label="Phone Number" name="phone"
+         >
             <Input
               placeholder="phone"
               onChange={(e) => setPhone(e.target.value)}
             />
           </Form.Item>
         </Col>
-        {/* <Col span={8} xs={24} sm={24} lg={8}>
-          <Form.Item
-            required
-            label="Email Address"
-            name="emailAddress"
-            rules={[{ required: true }]}
-          >
-            <Input
-              placeholder="Email Address"
-              onChange={(e) => setEmailAddress(e.target.value)}
-            />
-          </Form.Item>
-        </Col> */}
+       
         <Col span={24} xs={24} sm={24} lg={12}>
-          <Form.Item required label="Issue" name="issue">
+          <Form.Item 
+          required 
+          label="Issue" name="issue"
+          rules={[{ required: true }]}>
             <Input
               placeholder="Issue"
               onChange={(e) => setIssue(e.target.value)}
@@ -94,17 +104,16 @@ function Help({ onFinish }) {
           </Form.Item>
         </Col>
         <Col span={24} xs={24} sm={24} lg={12}>
-          <Form.Item required label="Need" name="need">
+          <Form.Item 
+          required 
+          label="Need" name="need"
+          rules={[{ required: true }]}>
             <Input
               placeholder="Need"
               onChange={(e) => setNeed(e.target.value)}
             />
           </Form.Item>
-        </Col>
-      </Row>
-      <hr />
-
-      <div className="d-flex justify-content-end">
+          <div className="d-flex justify-content-end">
         <Button
           className="primary-button"
           htmlType="submit"
@@ -113,8 +122,14 @@ function Help({ onFinish }) {
           SUBMIT
         </Button>
       </div>
+        </Col>
+      </Row>
+      </Form>
+      <hr />
+
       
-    </Form>
+<br></br>
+
     </Col>
     </Row>
   );

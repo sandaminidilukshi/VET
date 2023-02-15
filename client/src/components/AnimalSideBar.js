@@ -39,6 +39,7 @@ const navigate = useNavigate();
             {label:"Animal Profile", key:"/profile/animalprofile",icon:<BookOutlined />},
             {label:"Update", key:"/profile/update",icon:<EditOutlined />},
             {label:"Help Centre", key:"/profile/help",icon:<PlusOutlined />},
+            {label:"Notifications", key:"/profile/notifications",icon:<BookOutlined />},
         ]} ></Menu>
         <Paths />
         </Space>
@@ -86,6 +87,7 @@ const navigate = useNavigate();
         <Route path="/" element={<div>Records</div>}></Route>
         <Route path="/profile/update" element={<div>Update</div>}></Route>
         <Route path="/profile/help" element={<div>Help</div>}></Route>
+        <Route path="/profile/notifications" element={<div>Notifications</div>}></Route>
       </Routes>
     </div>
   }

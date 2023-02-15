@@ -11,7 +11,8 @@ router.post("/save-help-request", async (req, res) => {
       phone: req.body.phone,
       issue: req.body.issue,
       need: req.body.need,
-      reply:req.body.reply
+      reply:req.body.reply,
+      read:false
     });
     await newHelpRequest.save();
     res.status(200).send({
@@ -46,23 +47,6 @@ router.get("/get-all-help-requests", async (req, res) => {
   }
 });
 
-router.get("/get-help-requests-by-user", async (req, res) => {
-  try {
-    const helpView = await HelpRequest.find({userId:req.body.userId});
-    res.status(200).send({
-      message: "Help requests fetched successfully",
-      success: true,
-      data: helpView,
-    });
-  } catch (error) {
-    console.log(error);
-    res.status(500).send({
-      message: "Error getting help requests",
-      success: false,
-      error,
-    });
-  }
-});
 
 router.post("/update-reply", authMiddleware, async (req, res) => {
   try {
@@ -96,5 +80,55 @@ router.post("/update-reply", authMiddleware, async (req, res) => {
   //           });
   //  }
 });
+
+router.post("/get-help-requests-by-user", async (req, res) => {
+  try {
+    const helpView = await HelpRequest.find({userId:req.body.userId});
+    res.status(200).send({
+      message: "Help requests fetched successfully by user Id",
+      success: true,
+      data: helpView,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({
+      message: "Error getting help requests",
+      success: false,
+      error,
+    });
+  }
+});
+
+
+// router.post("/update-reply", authMiddleware, async (req, res) => {
+//   try {
+//     const { doctorId, reply } = req.body;
+//     const replynew = await HelpRequest.findByIdAndUpdate(appointmentId, {
+//       reply,
+//     });
+
+//     const user = await User.findOne({ _id: replynew.userId });
+//     const unseenNotifications = user.unseenNotifications;
+//     unseenNotifications.push({
+//       type: "reply-ssent",
+//       message: ` ${reply}`,
+//       onClickPath: "/HelpCentre",
+//     });
+
+  //   await user.save();
+
+  //   res.status(200).send({
+  //     message: "Appointment status updated successfully",
+  //     success: true
+  //   });
+  // } catch (error) {
+  //   console.log(error);
+  //   res.status(500).send({
+  //     message: "Error changing appointment status",
+  //     success: false,
+  //     error,
+  //   });
+  // }
+// });
 
 module.exports = router;

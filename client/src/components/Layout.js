@@ -78,6 +78,11 @@ function Layout({ children }) {
       icon: "ri-home-line",
     },
     {
+      name: "Appointments",
+      path: "/admin/appointments",
+      icon: "ri-home-line",
+    },
+    {
       name: "Dashboard",
       path: "/admin/dashboard",
       icon: "ri-home-line",

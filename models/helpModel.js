@@ -37,6 +37,10 @@ const helpSchema = new mongoose.Schema(
       type: String,
       required: false,
     },
+    read: {
+      type: Boolean,
+      required: false,
+    },
   },
   { timestamps: true }
 );

@@ -14,82 +14,24 @@ function ViewHelp() {
   const [help, setHelp] = useState([]);
   const [animal, setAnimal] = useState("");
   const [phone, setPhone] = useState("");
- // const [email, setEmail] = useState("");
   const [issue, setIssue] = useState("");
   const [need, setNeed] = useState("");
   const [reply, setReply] = useState("");
+  const [helpReqId, setHelpReqId] = useState("")
 
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state.user);
-  const viewModal = (Animal, Phone, Issue, Need,Reply) => {
+  const viewModal = (HelpReqId,Animal, Phone, Issue, Need,Reply) => {
     setAnimal(Animal);
     setPhone(Phone);
-    //setEmail(EmailAddress);
     setIssue(Issue);
     setNeed(Need);
     setOpen(true);
     setReply(Reply);
+    setHelpReqId(HelpReqId)
+  
   };
-  const onFinish = async (req,res) => {
-    try {
-      dispatch(showLoading());
-      const response = await axios.post(
-        "/api/help/update-reply",
-        {
-          
-
-          userId: user._id,
-          animalTypeHelp: req.body.animalTypeHelp,
-      phone: req.body.phone,
-     // emailAddress: req.body.emailAddress,
-      issue: req.body.issue,
-      need: req.body.need,
-      reply: req.body.reply
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-        }
-      );
-      dispatch(hideLoading());
-      if (response.data.success) {
-        toast.success("Sent Reply");
-        
-      } else {
-        toast.success("Sent Reply");
-      }
-    } catch (error) {
-      dispatch(hideLoading());
-      toast.success("Sent Reply");
-    }
-  };
-
-  // const submitHandler =  async (params)=>{
-   
-  //   try {
-  //     const {data} = await axios.post('/api/prescription/save-reply',
-  //    {
-  //     userId: params.userId,
-  //      "reply" : reply
-            
-  //     }, 
-      
-    
-  //     {
-  //       headers: {
-  //         Authorization: `Bearer ${localStorage.getItem("token")}`,
-  //       },
-  //     }
-  //     )
-      
-
-  //     //console.log(data)
-  //   } catch (err) {
-  //     toast.error(err);
-      
-  //   }
-  // }
+ 
   const getHelpData = async () => {
     try {
       dispatch(showLoading());
@@ -108,6 +50,28 @@ function ViewHelp() {
       dispatch(hideLoading());
     }
   };
+  const getReply = async () => {
+    try {
+      dispatch(showLoading());
+      const resposne = await axios.post("/api/help/update-reply", 
+      {helpReqId:helpReqId ,userId: user._id, reply: reply },
+      {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
+      dispatch(hideLoading());
+
+      if (resposne.data.success) {
+        toast.success("Reply Sent Successfully");
+      }
+      console.log("records", resposne.data.data);
+    } catch (error) {
+      dispatch(hideLoading());
+    }
+  };
+
+  
 
   useEffect(() => {
     getHelpData();
@@ -143,9 +107,9 @@ function ViewHelp() {
           type="primary"
           onClick={() =>
             viewModal(
+              record._id,
               record.animalTypeHelp,
               record.phone,
-              //record.emailAddress,
               record.issue,
               record.need
             )
@@ -168,7 +132,7 @@ function ViewHelp() {
         centered
         visible={open}
         onOk={() =>{ setOpen(false);
-          onFinish();                             
+          getReply();                           
         }
         }
         onCancel={() => setOpen(false)}
@@ -185,7 +149,7 @@ function ViewHelp() {
       </Col>
       <Col span={12}>
        <div className="w-full" >
-                                                  <div className="p-2 m-2" style={{ border: '1px solid', borderColor: "#a5a4a4", width: '90%', borderRadius: '5px',layout:"vertical" }} >
+                                                  <div className="p-2 m-2" style={{ border: '1px solid', borderColor: "#a5a4a4", width: '90%', layout:"vertical" }} >
                                                     <div className="flex" >
                                                       <h6 className="text-12 my-0">Animal Type :</h6>
                                                          <p className="text-12 my-0 ml-2 ">{animal}</p>
@@ -208,16 +172,14 @@ function ViewHelp() {
                                         </div>
                                         </div>
                                         
-        {/* <p>Animal Type: {animal} </p>
-        <p>Phone Number: {phone}</p>
-        <p>Pet's issue: {issue}</p>
-        <p>Pet's Need: {need}</p> */}
+      
         <input
         className="w-full"
         style={{marginLeft:"20px"}}
           type="text"
           onChange={(e) => setReply(e.target.value)}
           value={reply}
+          rules={[{ required: true }]}
         />
         </Col>
                                         </Row>

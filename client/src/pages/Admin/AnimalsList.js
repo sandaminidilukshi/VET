@@ -73,13 +73,6 @@ return (
                             // marginTop:'2px',
                         }} className="flex  ">
           
-         
-    {/* <input mt-0
-      placeholder="Search owner name"
-      className="space between "
-    ></input> */}
-    
-      {/* <img src="https://static.vecteezy.com/system/resources/thumbnails/001/591/586/small/free-search-icon-free-vector.jpg" style={{ width: 40 , height: 40 }} className=" h-6 mt-1px" alt="search"></img> */}
       </div>
 </Col></Row>
     <hr />
