@@ -34,6 +34,10 @@ function Register() {
           <Form.Item label="Name" name="name">
             <Input placeholder="Name" />
           </Form.Item>
+          <Form.Item label="Phone Number" name="phoneno">
+            <Input placeholder="Phone Number" type="number" />
+          </Form.Item>
+
           <Form.Item label="Email" name="email">
             <Input placeholder="Email" />
           </Form.Item>

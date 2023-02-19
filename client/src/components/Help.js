@@ -28,6 +28,7 @@ function Help({ onFinish }) {
           issue: issue,
           need: need,
           reply:""
+          
         },
 
         {

@@ -32,6 +32,13 @@ import ViewHelp from "./pages/Doctor/ViewHelp";
 import HelpNotifications from "./components/HelpNotifications";
 import AppointmentsList from "./pages/Admin/AppointmentsList"
 import HelpView from "./components/HelpView";
+import ApplyPharmacist from "./pages/ApplyPharmacist"
+import PharmacistList from "./pages/Admin/PharmacistList";
+import HomeNavigatePharmacy from "./pages/HomeNavigatePharmacy"
+import NavigateInventory from "./pages/NavigateInventory"
+import NavigatePresByUserId from "./pages/NavigatePresByUserId";
+import NavigatePharmacistDashboard from "./pages/NavigatePharmacistDashboard"
+
 function App() {
   const { loading } = useSelector((state) => state.alerts);
   return (
@@ -76,6 +83,14 @@ function App() {
           }
         />
         <Route
+          path="/apply-pharmacist"
+          element={
+            <ProtectedRoute>
+              <ApplyPharmacist />
+            </ProtectedRoute>
+          }
+        />
+        <Route
           path="/notifications"
           element={
             <ProtectedRoute>
@@ -105,6 +120,14 @@ function App() {
           element={
             <ProtectedRoute>
               <DoctorsList />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/admin/pharmacistlist"
+          element={
+            <ProtectedRoute>
+              <PharmacistList />
             </ProtectedRoute>
           }
         />
@@ -191,6 +214,14 @@ function App() {
             </ProtectedRoute>
           }
         />
+         <Route
+          path="/user/prescriptions"
+          element={
+            <ProtectedRoute>
+              <NavigatePresByUserId />
+            </ProtectedRoute>
+          }
+        />
         <Route
           path="/profile/update"
           element={
@@ -260,6 +291,30 @@ function App() {
           element={
             <ProtectedRoute>
               <HelpView />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/pharmacist/home"
+          element={
+            <ProtectedRoute>
+              <HomeNavigatePharmacy />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/pharmacist/dashboard"
+          element={
+            <ProtectedRoute>
+              <NavigatePharmacistDashboard />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/pharmacist/inventory"
+          element={
+            <ProtectedRoute>
+              <NavigateInventory />
             </ProtectedRoute>
           }
         />

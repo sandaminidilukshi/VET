@@ -116,7 +116,10 @@ function HelpNotifications() {
             >
               View
             </Button>
-          ),
+           
+          )
+          
+          
         },
       ]
      
@@ -165,18 +168,18 @@ return (
       </Col>
      
       <Col span={12}>
-       <div className="w-full" >
-                                                  <div className="p-2 m-2" style={{ border: '1px solid', borderColor: "#a5a4a4", width: '90%', layout:"vertical" }} >
-                                                    <div className="flex" >
+       <div className="w-full" style={{height:"100%"}} >
+            <div className="p-2 m-2" style={{ border: '1px solid', borderColor: "#a5a4a4", width: '90%', layout:"vertical" }} >
+                                                    <div className="vertical" >
                                                       <h6 className="text-12 my-0">Animal Type :</h6>
                                                          <p className="text-12 my-0 ml-2 ">{animal}</p>
                                             </div>
-                                            <div className="flex" >
+                                            <div className="vertical" >
                                                 <h6 className="text-12 my-0">Pet's issue :</h6>
                                                 <p className="text-12 my-0 ml-2 ">{issue}</p>
                                                    
                                             </div>
-                                            <div className="flex" >
+                                            <div className="vertical" >
                                                 <h6 className="text-12 my-0">Pet's Need : </h6>
                                                 <p className="text-12 my-0 ml-2 ">{need}</p>
                                                    

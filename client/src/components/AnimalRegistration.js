@@ -62,7 +62,7 @@ function AnimalRegistration() {
               >
                 <Input
                   style={{ width: "300px" }}
-                  placeholder="Name"
+                  placeholder="  Name"
                   onChange={(e) => setName(e.target.value)}
                 />
               </Form.Item>
@@ -77,7 +77,7 @@ function AnimalRegistration() {
               >
                 <Input
                   style={{ width: "300px" }}
-                  placeholder="Gender"
+                  placeholder="  Gender"
                   onChange={(e) => setGender(e.target.value)}
                 />
               </Form.Item>
@@ -91,7 +91,7 @@ function AnimalRegistration() {
               >
                 <Input
                   style={{ width: "300px" }}
-                  placeholder="Spayed or Neutered"
+                  placeholder="  Spayed or Neutered"
                   onChange={(e) => setReproduction(e.target.value)}
                 />
               </Form.Item>
@@ -105,7 +105,7 @@ function AnimalRegistration() {
               >
                 <Input
                   style={{ width: "300px" }}
-                  placeholder="weight"
+                  placeholder="  Weight"
                   onChange={(e) => setWeight(e.target.value)}
                 />
               </Form.Item>
@@ -119,7 +119,7 @@ function AnimalRegistration() {
               >
                 <Input
                   style={{ width: "300px" }}
-                  placeholder="Animal Type"
+                  placeholder="  Animal Type"
                   onChange={(e) => setAnimalType(e.target.value)}
                 />
               </Form.Item>

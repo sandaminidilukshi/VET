@@ -56,7 +56,23 @@ router.get("/get-all-records", async (req, res) => {
     });
   }
 });
-
+// router.post("/get-prescription-by-userId", async (req, res) => {
+//   try {
+//     const prescription = await Prescription.find({userId:req.body.userId});
+//     res.status(200).send({
+//       message: "Prescription fetched successfully by user Id",
+//       success: true,
+//       data: prescription,
+//     });
+//   } catch (error) {
+//     console.log(error);
+//     res.status(500).send({
+//       message: "Error getting prescription requests",
+//       success: false,
+//       error,
+//     });
+//   }
+// });
 
 
 

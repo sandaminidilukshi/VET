@@ -175,7 +175,7 @@ function ViewHelp() {
       
         <input
         className="w-full"
-        style={{marginLeft:"20px"}}
+        style={{marginLeft:"10px" ,width:"90%"}}
           type="text"
           onChange={(e) => setReply(e.target.value)}
           value={reply}

@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 const prescriptionSchema = new mongoose.Schema(
     {    
-         userId: {
+         user: {
          type: String,
          required: true,
         },
@@ -67,19 +67,7 @@ const prescriptionSchema = new mongoose.Schema(
             duration: {
               type: String,
             }}}],
-        //     total: {
-        //       type: Number,
-        //     },
-        //   },
-        // ],
-        // investigations: [
-        //   {
-        //     investigation: {
-        //       type: String,
-        //     },
-        //   },
-        // ],
-        
+       
         advices: 
           {
            

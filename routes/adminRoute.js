@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const User = require("../models/userModel");
 const Doctor = require("../models/doctorModel");
+const Pharmacist = require("../models/pharmacistModel")
 const authMiddleware = require("../middlewares/authMiddleware");
 
 router.get("/get-all-doctors", authMiddleware, async (req, res) => {
@@ -16,6 +17,24 @@ router.get("/get-all-doctors", authMiddleware, async (req, res) => {
     console.log(error);
     res.status(500).send({
       message: "Error applying doctor account",
+      success: false,
+      error,
+    });
+  }
+});
+
+router.get("/get-all-pharmacists", authMiddleware, async (req, res) => {
+  try {
+    const pharmacists = await Pharmacist.find({});
+    res.status(200).send({
+      message: "Pharmacists fetched successfully",
+      success: true,
+      data: pharmacists,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({
+      message: "Error applying pharmacist account",
       success: false,
       error,
     });
@@ -69,6 +88,42 @@ router.post(
       console.log(error);
       res.status(500).send({
         message: "Error applying doctor account",
+        success: false,
+        error,
+      });
+    }
+  }
+);
+
+router.post(
+  "/change-pharmacist-account-status",
+  authMiddleware,
+  async (req, res) => {
+    try {
+      const { pharmacistId, status } = req.body;
+      const pharmacist = await Pharmacist.findByIdAndUpdate(pharmacistId, {
+        status,
+      });
+
+      const user = await User.findOne({ _id: pharmacist.userId });
+      const unseenNotifications = user.unseenNotifications;
+      unseenNotifications.push({
+        type: "new-pharmacist-request-changed",
+        message: `Your pharmacist account has been ${status}`,
+        onClickPath: "/notifications",
+      });
+      user.isPharmacist = status === "approved" ? true : false;
+      await user.save();
+
+      res.status(200).send({
+        message: "Pharmacist status updated successfully",
+        success: true,
+        data: pharmacist,
+      });
+    } catch (error) {
+      console.log(error);
+      res.status(500).send({
+        message: "Error changing status of pharmacist account",
         success: false,
         error,
       });

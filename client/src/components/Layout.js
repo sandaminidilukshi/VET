@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import "../layout.css";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Badge } from "antd";
+import { setUser } from "../redux/userSlice";
 
 function Layout({ children }) {
   const [collapsed, setCollapsed] = useState(false);
@@ -10,6 +11,8 @@ function Layout({ children }) {
 
   const navigate = useNavigate();
   const location = useLocation();
+  const dispatch = useDispatch();
+
   const userMenu = [
     {
       name: "Home",
@@ -27,8 +30,18 @@ function Layout({ children }) {
       icon: "ri-hospital-line",
     },
     {
+      name: "Apply Pharmacist",
+      path: "/apply-pharmacist",
+      icon: "ri-hospital-line",
+    },
+    {
       name: "Animal Profile",
       path: "/user/profile",
+      icon: "ri-user-line",
+    },
+    {
+      name: "Prescriptions",
+      path: "/user/prescriptions",
       icon: "ri-user-line",
     }
   ];
@@ -92,6 +105,11 @@ function Layout({ children }) {
       path: "/admin/userslist",
       icon: "ri-user-line",
     },
+    {
+      name: "Pharmacists",
+      path: "/admin/pharmacistlist",
+      icon: "ri-user-line",
+    },
     
     {
       name: "Animals",
@@ -103,38 +121,45 @@ function Layout({ children }) {
       path: "/admin/doctorslist",
       icon: "ri-user-star-line",
     },
-    // {
-    //   name: "Profile",
-    //   path: "/profile",
-    //   icon: "ri-user-line",
-    // },
   ];
-  const animalMenu = [
+  const pharmacistMenu = [
     {
-      name: "Register",
-      path: "/profile/register",
+      name: "Home",
+      path: "/pharmacist/home",
       icon: "ri-home-line",
     },
     {
-      name: "Bookings",
-      path: "/profile/bookings",
+      name: "Dashboard",
+      path: "/pharmacist/dashboard",
+      icon: "ri-home-line",
+    },  
+    {
+      name: "Inventory",
+      path: "/pharmacist/inventory",
       icon: "ri-home-line",
     },
     {
-      name: "Records",
-      path: "/profile/records",
+      name: "Sales",
+      path: "/pharmacist/sales",
       icon: "ri-user-line",
     },
     {
-      name: "Update",
-      path: "/profile/update",
+      name: "Receiving",
+      path: "/pharmacist/receiving",
       icon: "ri-user-star-line",
     },
     {
-      name: "Help-Centre",
-      path: "/profile/help",
+      name: "Expired List",
+      path: "/pharmacist/expired-list",
       icon: "ri-user-line",
     },
+    {
+      name: "Supplier List",
+      path: "/pharmacist/supplier-list",
+      icon: "ri-user-line",
+    },
+    
+
   ]
 
 
@@ -142,8 +167,16 @@ function Layout({ children }) {
     ? adminMenu
     : user?.isDoctor
     ? doctorMenu
+    : user?.isPharmacist
+    ? pharmacistMenu
     : userMenu;
-  const role = user?.isAdmin ? "Admin" : user?.isDoctor ? "Doctor" : "User";
+  const role = user?.isAdmin ? "Admin" : user?.isDoctor ? "Doctor" :user?.isPharmacist ? "Pharmacist": "User";
+  
+  
+  const signOutHandler=()=>{
+    dispatch(setUser(null));
+  }
+  
   return (
     <div className="main">
       <div className="d-flex layout">
@@ -175,7 +208,7 @@ function Layout({ children }) {
               }}
             >
               <i className="ri-logout-circle-line"></i>
-              {!collapsed && <Link to="/login">Logout</Link>}
+              {!collapsed && <Link to="/login" onClick={signOutHandler}>Logout</Link>}
             </div>
           </div>
         </div>

@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const User = require("../models/userModel");
 const Doctor = require("../models/doctorModel");
+const Pharmacist = require("../models/pharmacistModel")
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const authMiddleware = require("../middlewares/authMiddleware");
@@ -113,6 +114,38 @@ router.post("/apply-doctor-account", authMiddleware, async (req, res) => {
     });
   }
 });
+
+router.post("/apply-pharmacist-account", authMiddleware, async (req, res) => {
+  try {
+    const newpharmacist = new Pharmacist({ ...req.body, status: "pending" });
+    await newpharmacist.save();
+    const adminUser = await User.findOne({ isAdmin: true });
+
+    const unseenNotifications = adminUser.unseenNotifications;
+    unseenNotifications.push({
+      type: "new-pharmacist-request",
+      message: `${newpharmacist.firstName} ${newpharmacist.lastName} has applied for a pharmacist account`,
+      data: {
+        pharmacistId: newpharmacist._id,
+        name: newpharmacist.firstName + " " + newpharmacist.lastName,
+      },
+      onClickPath: "/admin/pharmacistlist",
+    });
+    await User.findByIdAndUpdate(adminUser._id, { unseenNotifications });
+    res.status(200).send({
+      success: true,
+      message: "Pharmacist account applied successfully",
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({
+      message: "Error applying pharmacist account",
+      success: false,
+      error,
+    });
+  }
+});
+
 router.post(
   "/mark-all-notifications-as-seen",
   authMiddleware,

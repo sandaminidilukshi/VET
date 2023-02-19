@@ -10,9 +10,17 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    phoneno: {
+      type: String,
+      required: true,
+    },
     password: {
       type: String,
       required: true,
+    },
+    isPharmacist: {
+      type: Boolean,
+      default: false,
     },
     isDoctor: {
       type: Boolean,
