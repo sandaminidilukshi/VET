@@ -16,9 +16,11 @@ function Inventory() {
   const [price, setPricePerPiece] = useState("");
   const [quantity, setQuantity] = useState("");
   const [expiry, setExpiry] = useState("");
+  const [isEdit, setIsEdit] = useState(false)
+  const [drugId, setDrugId] = useState("")
 
-
-  const viewModal = (ProductName,ItemNo, Manufacturer, Category, PricePerPiece,Quantity,Expiry) => {
+  const viewModal = (DrugId,ProductName,ItemNo, Manufacturer, Category, PricePerPiece,Quantity,Expiry,Editable) => {
+    console.log("product",ProductName)
     setProductName(ProductName);
     setItemNo(ItemNo);
     setManufacturer(Manufacturer);
@@ -27,25 +29,17 @@ function Inventory() {
     setPricePerPiece(PricePerPiece);
     setQuantity(Quantity);
     setExpiry(Expiry);
-  
+    setIsEdit(Editable);
+    setDrugId(DrugId);
+    console.log("id",DrugId)
   };
  
-  const [datasource, setDatasource] = useState(
-[
-  {
-    id:1,
-    productname:'Amoxicillin',
-    itemno:'am-01',
-    manufacturer:'Hayleys',
-    category:'Drugs',
-    price:'20',
-    quantity:'500',
-    expiry:'2024-2-16',
-  }
-]
+ 
+ 
 
-  )
+  
   const dispatch = useDispatch();
+  
  
  
  const columns = [
@@ -77,15 +71,73 @@ function Inventory() {
           title: "Expiry Date",
           dataIndex: "expiry",
         }, 
+        {
+          title: "Actions",
+          dataIndex: "actions",
+    
+          render: (_, record) => (
+            <Button style={{ background: "#a0d911", borderColor: "yellow" ,  height: 40}}
+              type="primary"
+              onClick={() =>
+                viewModal(
+                  record._id,
+                  record.productname,
+                  record.itemno,
+                  record.manufacturer,
+                  record.category,
+                  record.price,
+                  record.quantity,
+                  record.expiry,
+                  true,
+                
+
+                )
+              }
+            >
+              Edit
+            </Button>
+          ),
+        },
       ]
      
+      const getEditedDrug = async () => {
+        try {
+         
+          const resposne = await axios.post("/api/drugs/edit-drug", 
+
+          { drugId:drugId,
+            productname:productname,
+            itemno:itemno,
+            manufacturer:manufacturer,
+            category:category,
+            price:price,
+            quantity:quantity,
+            expiry:expiry,
+            
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+          });
+         
+    
+          if (resposne.data.success) {
+            toast.success("Drug Updated Successfully");
+          }
+         
+        } catch (error) {
       
+        }
+      };
 
       const submitHandler = async (e) => {
         try {
           const response = await axios.post(
             "/api/drugs/save-drug",
-            {  productname: productname,
+
+            { 
+               productname: productname,
               itemno: itemno,
               manufacturer:manufacturer,
               category: category,
@@ -200,7 +252,7 @@ return (
                         }} className=" space-between">
     <Button type="primary" className=" h-6 mt-1px"  style={{ background: "#a0d911", borderColor: "yellow" ,  height: 40}}
      onClick={() =>
-      viewModal()
+      viewModal("","","","","","","","",false)
     }
     >Add Drug</Button>
      
@@ -211,11 +263,14 @@ return (
     <hr />
     <Table columns={columns}  dataSource={drug} />
     <Modal    destroyOnClose={true}
-        title="Add a new drug"
+        title={isEdit ? "Edit Drug" : "Add a new drug"}
         centered
-        visible={open}
-        onOk={() =>{ setOpen(false);
-           submitHandler();                     
+        visible={open}  
+        
+        onOk={isEdit?() =>{ setOpen(false);
+         getEditedDrug()}:() =>{ setOpen(false);
+          submitHandler()
+
         }
         }
         onCancel={() => setOpen(false)}

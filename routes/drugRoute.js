@@ -51,47 +51,53 @@ router.post("/save-drug", authMiddleware, async (req, res) => {
     }
   });
 
-//   router.post("/edit-drug", authMiddleware, async (req, res) => {
-//     try {
+  router.post("/edit-drug", authMiddleware, async (req, res) => {
+    try {
       
-//        await Drug.findOneAndUpdate({_id:req.body.drugId},
-//         {
-//           drugId: req.body.drugId,
-         
-//         }
-//         ) ;
+       await Drug.findOneAndUpdate({_id:req.body.drugId},
+        {
+          productname:req.body.productname,
+          itemno: req.body.itemno,
+          manufacturer:  req.body.manufacturer,
+          category:req.body.category,
+          price:req.body.price,
+          quantity:req.body.quantity,
+          expiry:req.body.expiry
+        }
+        ) ;
         
-//       res.status(200).send({
-//         success: true,
-//         message: "Drug edited successfully",
+      res.status(200).send({
+        success: true,
+        message: "Drug edited successfully",
       
-//       });
-//     } catch (error) {
-//       res
-//         .status(500)
-//         .send({ message: "Error editing drug", success: false, error });
-//     }
+      });
+    } catch (error) {
+      res
+        .status(500)
+        .send({ message: "Error editing drug", success: false, error });
+    }
   
    
-//   });
+  });
 
-//   router.get("/find-drug-by-id", async (req, res) => {
-//     try {
-//       const drugs = await Drug.findOne({_id:req.body.drugId})
+  router.get("/get-drug-info-by-itemno", async (req, res) => {
+    try {
+      const drugs = await Drug.findOne({_id:req.body.itemno})
       
-//       res.status(200).send({
-//         message: "Drugs fetched successfully",
-//         success: true,
-//         data: drugs,
-//       });
-//     } catch (error) {
-//       console.log(error);
-//       res.status(500).send({
-//         message: "Error getting drugs",
-//         success: false,
-//         error,
-//       });
-//     }
-//   });
+      res.status(200).send({
+        message: "Drugs fetched successfully",
+        success: true,
+        data: drugs,
+      });
+    } catch (error) {
+      console.log(error);
+
+      res.status(500).send({
+        message: "Error getting drugs",
+        success: false,
+        error,
+      });
+    }
+  });
 
 module.exports = router;
