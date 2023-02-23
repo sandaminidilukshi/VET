@@ -4,19 +4,19 @@ import React from "react";
 import axios, { Axios } from "axios";
 import { useState } from "react";
 import toast from "react-hot-toast";
-
+import { useDispatch , useSelector} from "react-redux";
 function AnimalRegistration() {
   const [name, setName] = useState("");
   const [gender, setGender] = useState("");
   const [reproduction, setReproduction] = useState("");
   const [weight, setWeight] = useState("");
   const [animalType, setAnimalType] = useState("");
-
+  const { user } = useSelector((state) => state.user);
   const submitHandler = async (e) => {
     try {
       const { response } = await axios.post(
         "/api/animal/save-animal",
-        {
+        {  userId:user._id,
           animalName: name,
           gender: gender,
           reproduction: reproduction,

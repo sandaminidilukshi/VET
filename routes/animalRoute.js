@@ -7,6 +7,7 @@ const User = require("../models/userModel");
 router.post("/save-animal", authMiddleware, async (req, res) => {
     try {
       const newAnimal = new Animal({
+        userId:req.body.userId,
         animalName: req.body.animalName,
         gender: req.body.gender,
         reproduction: req.body.reproduction,

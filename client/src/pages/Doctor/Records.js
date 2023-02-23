@@ -4,9 +4,10 @@ import React, { useState } from "react";
 import toast from "react-hot-toast";
 import { useSelector } from "react-redux";
 import Layout from "../../components/Layout";
+import { Select } from 'antd';
 
 function Records() {
-
+  
   const { user } = useSelector((state) => state.user);
   const [userName, setUserName] = useState('')
   const [doctorName, setDoctorName] = useState('')
@@ -24,6 +25,13 @@ function Records() {
   const [evening, setEvening] = useState('')
   const [durationDosage, setDurationDosage] = useState('')  
   const [advices, setAdvices] = useState('')
+
+  const onChange = (value) => {
+    console.log(`selected ${value}`);
+  };
+  const onSearch = (value) => {
+    console.log('search:', value);
+  };
 
   const submitHandler = async(e)=>{
    
@@ -74,7 +82,24 @@ function Records() {
       
     }
   }
+  async function fetchUserList(username) {
+    console.log('fetching user', username);
+    return fetch('/api/admin/get-all-users',{
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+    })
+      .then((response) => response.json())
+      .then((body) =>
+        body.results.map((user) => ({
+          label: `${user.data.name} `,
+          value: user.data._id
+         
+        })),console.log('fetched user', user)
+      );
+      
 
+  }
   
 return (<Layout>
     <Form layout="vertical" onFinish={submitHandler}> 
@@ -82,16 +107,18 @@ return (<Layout>
       <h1 className="card-title mt-3">Animal Record</h1>
       <Row gutter={20}>
         <Col span={8} xs={24} sm={24} lg={8}>
-          <Form.Item
-            required
-            label="User Name"
-            name="userName"
-            rules={[{ required: true }]}
-          >
-            <Input placeholder="User Name" onChange={(e)=>(setUserName(e.target.value))}/>
-          </Form.Item>
-
-        </Col>
+        <Select
+    showSearch
+    placeholder="Select a person"
+    optionFilterProp="children"
+    onChange={onChange}
+    onSearch={fetchUserList}
+    filterOption={(input, option) =>
+      (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
+    }
+ ></Select>
+ 
+    </Col>
         
         <Col span={8} xs={24} sm={24} lg={8}>
           <Form.Item

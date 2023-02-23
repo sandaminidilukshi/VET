@@ -2,7 +2,7 @@ import React from 'react'
 import Inventory from '../pages/Pharmacist/Inventory'
 import Layout from '../components/Layout'
 
-function HomeNavigatePharmacy() {
+function NavigateInventory() {
   return (
   <Layout>
     <Inventory />
@@ -10,4 +10,4 @@ function HomeNavigatePharmacy() {
   )
 }
 
-export default HomeNavigatePharmacy
+export default NavigateInventory

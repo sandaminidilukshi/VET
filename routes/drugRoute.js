@@ -80,24 +80,24 @@ router.post("/save-drug", authMiddleware, async (req, res) => {
    
   });
 
-  router.get("/get-drug-info-by-itemno", async (req, res) => {
-    try {
-      const drugs = await Drug.findOne({_id:req.body.itemno})
+  // router.get("/get-drug-info-by-itemno", async (req, res) => {
+  //   try {
+  //     const drugs = await Drug.findOne({_id:req.body.itemno})
       
-      res.status(200).send({
-        message: "Drugs fetched successfully",
-        success: true,
-        data: drugs,
-      });
-    } catch (error) {
-      console.log(error);
+  //     res.status(200).send({
+  //       message: "Drugs fetched successfully",
+  //       success: true,
+  //       data: drugs,
+  //     });
+  //   } catch (error) {
+  //     console.log(error);
 
-      res.status(500).send({
-        message: "Error getting drugs",
-        success: false,
-        error,
-      });
-    }
-  });
+  //     res.status(500).send({
+  //       message: "Error getting drugs",
+  //       success: false,
+  //       error,
+  //     });
+  //   }
+  // });
 
 module.exports = router;

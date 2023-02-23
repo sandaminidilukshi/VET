@@ -38,6 +38,10 @@ import HomeNavigatePharmacy from "./pages/HomeNavigatePharmacy"
 import NavigateInventory from "./pages/NavigateInventory"
 import NavigatePresByUserId from "./pages/NavigatePresByUserId";
 import NavigatePharmacistDashboard from "./pages/NavigatePharmacistDashboard"
+import NavigateSalesUI from "./pages/NavigateSalesUI";
+import NavigateSupplierUI from "./pages/NavigateSupplierUI";
+import NavigateReceivingUI from "./pages/NavigateReceivingUI";
+import NavigateExpiredUI from "./pages/NavigateExpiredUI";
 
 function App() {
   const { loading } = useSelector((state) => state.alerts);
@@ -315,6 +319,38 @@ function App() {
           element={
             <ProtectedRoute>
               <NavigateInventory />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/pharmacist/sales"
+          element={
+            <ProtectedRoute>
+              <NavigateSalesUI/>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/pharmacist/supplier-list"
+          element={
+            <ProtectedRoute>
+              <NavigateSupplierUI/>
+            </ProtectedRoute>
+          }
+        />
+         <Route
+          path="/pharmacist/receiving"
+          element={
+            <ProtectedRoute>
+              <NavigateReceivingUI/>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/pharmacist/expired-list"
+          element={
+            <ProtectedRoute>
+              <NavigateExpiredUI/>
             </ProtectedRoute>
           }
         />

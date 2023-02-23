@@ -10,7 +10,10 @@ const prescriptionRoute = require("./routes/prescriptionRoute");
 const animalRoute = require("./routes/animalRoute");
 const helpRoute = require ("./routes/helpRoute");
 const pharmacistRoute = require ("./routes/pharmacistRoute");
-const drugRoute = require  ("./routes/drugRoute")
+const drugRoute = require  ("./routes/drugRoute");
+const salesRoute = require  ("./routes/salesRoute");
+const receivingRoute = require  ("./routes/receivingRoute");
+const supplierRoute = require  ("./routes/supplierRoute");
 const path = require("path");
 
 app.use("/api/user", userRoute);
@@ -21,6 +24,9 @@ app.use("/api/animal", animalRoute);
 app.use("/api/help", helpRoute);
 app.use("/api/pharmacist", pharmacistRoute)
 app.use("/api/drugs", drugRoute)
+app.use("/api/sales", salesRoute)
+app.use("/api/receive", receivingRoute)
+app.use("/api/supplier", supplierRoute)
 
 if (process.env.NODE_ENV === "production") {
   app.use("/", express.static("client/build"));

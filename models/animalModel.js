@@ -1,10 +1,10 @@
 const mongoose = require("mongoose");
 const animalSchema = new mongoose.Schema(
   {
-    // userId: {
-    //   type: String,
-    //   required: false,
-    // },
+    userId: {
+      type: String,
+      required: false,
+    },
     animalName: {
       type: String,
       required: true,
