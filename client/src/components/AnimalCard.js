@@ -1,92 +1,51 @@
-import { Button, Col, DatePicker, Form, Input, Row, TimePicker } from "antd";
 import React, { useEffect, useState } from "react";
+import axios from "axios";
 import Layout from "../components/Layout";
+import { Calendar, Col, Row } from "antd";
+import Animal from "../components/Animal";
 import { useDispatch, useSelector } from "react-redux";
 import { showLoading, hideLoading } from "../redux/alertsSlice";
-import { toast } from "react-hot-toast";
-import axios from "axios";
-import { Navigate, useNavigate, useParams } from "react-router-dom";
 import AnimalSideBar from "./AnimalSideBar";
-
 function AnimalCard() {
-  const navigate = useNavigate();
   const { user } = useSelector((state) => state.user);
-  const [animal, setAnimal] = useState();
-  const params = useParams();
+  const [animals, setAnimals] = useState([]);
   const dispatch = useDispatch();
-
-  const getAnimalData = async () => {
+  const getData = async () => {
     try {
-      dispatch(showLoading());
-      const response = await axios.post(
-        "/api/animal/get-animal-info-by-user-id",
-        {
-          userId: params.userId,
-          
+      dispatch(showLoading())
+      const response = await axios.post("/api/animal/get-animals-by-userId", 
+      {
+        userId:user._id
+      },
+      {
+        headers: {
+          Authorization: "Bearer " + localStorage.getItem("token"),
         },
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-        }
-      );
-
-      dispatch(hideLoading());
+      });
+      dispatch(hideLoading())
       if (response.data.success) {
-        console.log(response.data.data);
-        setAnimal(response.data.data);
-        console.log(animal);
+        console.log("res",response.data.data)
+        setAnimals(response.data.data);
       }
     } catch (error) {
-      console.log(error);
-      dispatch(hideLoading());
+      dispatch(hideLoading())
     }
   };
 
   useEffect(() => {
-    getAnimalData();
+    getData();
   }, []);
   return (
     <AnimalSideBar>
-      <Form>
-        {animal && (
-          <div>
-            <h1 className="page-title">{animal.animalName}</h1>
-            <hr />
-            <Row gutter={20} className="mt-5" align="middle">
-              <Col span={8} sm={24} xs={24} lg={8}>
-                <img
-                  src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcShywja5_zmRTiMg4EkJWXPQc11q9DECwmDqA&usqp=CAU"
-                  alt=""
-                  width="100%"
-                />
-              </Col>
-              <Col span={8} sm={24} xs={24} lg={8}>
-                <h1 className="normal-text">
-                  <b>Gender :</b>
-                  {animal.gender}
-                </h1>
-                <p>
-                  <b>Animal Type : </b>
-                  {animal.animalType}
-                </p>
-
-                <p>
-                  <b>Reproduction Status : </b>
-                  {animal.reproduction}
-                </p>
-                <p>
-                  <b>Weight : </b>
-                  {animal.weight}
-                </p>
-
-                <div className="d-flex flex-column pt-2 mt-2"></div>
-              </Col>
-            </Row>
-          </div>
-        )}
-      </Form>
-    </AnimalSideBar>
+      <Row gutter={20}>
+        {animals.map((animal) => (
+          <Col span={8} xs={24} sm={24} lg={8}>
+            <Animal animal={animal} />
+          </Col>
+        ))}
+      </Row>
+      </AnimalSideBar>
+    
   );
 }
 

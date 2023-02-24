@@ -42,6 +42,7 @@ import NavigateSalesUI from "./pages/NavigateSalesUI";
 import NavigateSupplierUI from "./pages/NavigateSupplierUI";
 import NavigateReceivingUI from "./pages/NavigateReceivingUI";
 import NavigateExpiredUI from "./pages/NavigateExpiredUI";
+import AnimalDetails from "./pages/AnimalDetails";
 
 function App() {
   const { loading } = useSelector((state) => state.alerts);
@@ -150,6 +151,14 @@ function App() {
           element={
             <ProtectedRoute>
               <BookAppointment />
+            </ProtectedRoute>
+          }
+        />
+         <Route
+          path="/view-details/:animalId"
+          element={
+            <ProtectedRoute>
+              <AnimalDetails />
             </ProtectedRoute>
           }
         />

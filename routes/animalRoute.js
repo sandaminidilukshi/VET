@@ -48,9 +48,27 @@ router.post("/save-animal", authMiddleware, async (req, res) => {
       });
     }
   });
-  router.post("/get-animal-info-by-user-id", authMiddleware, async (req, res) => {
+
+
+  router.post("/get-animal-by-id", authMiddleware, async (req, res) => {
     try {
-      const animal = await Animal.findOne({ userId: req.body.userId });
+      const animal = await Animal.findById(req.body.animalId);
+      res.status(200).send({
+        success: true,
+        message: "Animal fetched successfully",
+        data: animal,
+      });
+    } catch (error) {
+      res
+        .status(500)
+        .send({ message: "Error getting animal info", success: false, error });
+    }
+  });
+
+
+  router.post("/get-animals-by-userId",  async (req, res) => {
+    try {
+      const animal = await Animal.find({userId:req.body.userId});
       res.status(200).send({
         success: true,
         message: "Animal info fetched successfully",
@@ -62,7 +80,6 @@ router.post("/save-animal", authMiddleware, async (req, res) => {
         .send({ message: "Error getting animal info", success: false, error });
     }
   });
-  
   
 
   module.exports = router;

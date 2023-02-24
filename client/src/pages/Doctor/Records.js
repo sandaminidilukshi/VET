@@ -9,7 +9,8 @@ import { Select } from 'antd';
 function Records() {
   
   const { user } = useSelector((state) => state.user);
-  const [users, setUsers] = useState([])
+  const [animalList, setAnimalList] = useState([])
+  const [userList, setUserList] = useState([])
   const [userName, setUserName] = useState('')
   const [doctorName, setDoctorName] = useState('')
   const [animalType, setAnimalType] = useState('')
@@ -85,32 +86,55 @@ function Records() {
     }
   }
  
-
- 
-  useEffect(() => {
-    console.log("123")
-    const getPatientsData = async () => {
-      try {
-        
-        const resposne = await axios.get(
-          "/api/admin/get-all-patients",
-          {
-            headers: {
-              Authorization: `Bearer ${localStorage.getItem("token")}`,
-            },
-          }
-        );
-       
-        if (resposne.data.success) {
-          setUsers(resposne.data.data);
+  const getPatientsData = async () => {
+    try {
+      
+      const resposne = await axios.get(
+        "/api/admin/get-all-patients",
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
         }
-      } catch (error) {
-        
+      );
+     
+      if (resposne.data.success) {
+        setUserList(resposne.data.data);
       }
-    };
-    console.log("789")
+    } catch (error) {
+      
+    }
+  };
+ //get animals by owner ID
+  const getAnimalsData = async (value) => {
+    try {
+      
+      const resposne = await axios.post(
+        "/api/animal/get-animal-info-by-user-id",
+        {
+          userId:value
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      );
+     
+      if (resposne.data.success) {
+        setAnimalList(resposne.data.data);
+      }
+    } catch (error) {
+      
+    }
+  };
+
+  useEffect(() => {
+    
+    
+  
     getPatientsData();
-  console.log("obj",users)
+
  
   }, [])
   
@@ -133,8 +157,8 @@ return (<Layout>
     optionFilterProp="children"
     // onChange={onChange}
     // onSearch={onSearch}
-    onSelect={onSelect}
-     options={users.map((person) => ({
+    onSelect={getAnimalsData}
+     options={userList.map((person) => ({
   value:  person._id,
   label: person.name,
 }))}
