@@ -1,6 +1,6 @@
 import { Button, Col, Form, Input, Row, TimePicker } from "antd";
 import axios, { Axios } from "axios";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { useSelector } from "react-redux";
 import Layout from "../../components/Layout";
@@ -9,6 +9,7 @@ import { Select } from 'antd';
 function Records() {
   
   const { user } = useSelector((state) => state.user);
+  const [users, setUsers] = useState([])
   const [userName, setUserName] = useState('')
   const [doctorName, setDoctorName] = useState('')
   const [animalType, setAnimalType] = useState('')
@@ -27,10 +28,11 @@ function Records() {
   const [advices, setAdvices] = useState('')
 
   const onChange = (value) => {
-    console.log(`selected ${value}`);
+    console.log(`Changed ${value}`);
   };
-  const onSearch = (value) => {
-    console.log('search:', value);
+  
+  const onSelect = (value) => {
+    console.log('selected:', value);
   };
 
   const submitHandler = async(e)=>{
@@ -82,24 +84,35 @@ function Records() {
       
     }
   }
-  async function fetchUserList(username) {
-    console.log('fetching user', username);
-    return fetch('/api/admin/get-all-users',{
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
-      },
-    })
-      .then((response) => response.json())
-      .then((body) =>
-        body.results.map((user) => ({
-          label: `${user.data.name} `,
-          value: user.data._id
-         
-        })),console.log('fetched user', user)
-      );
-      
+ 
 
-  }
+ 
+  useEffect(() => {
+    console.log("123")
+    const getPatientsData = async () => {
+      try {
+        
+        const resposne = await axios.get(
+          "/api/admin/get-all-patients",
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+          }
+        );
+       
+        if (resposne.data.success) {
+          setUsers(resposne.data.data);
+        }
+      } catch (error) {
+        
+      }
+    };
+    console.log("789")
+    getPatientsData();
+  console.log("obj",users)
+ 
+  }, [])
   
 return (<Layout>
     <Form layout="vertical" onFinish={submitHandler}> 
@@ -107,17 +120,26 @@ return (<Layout>
       <h1 className="card-title mt-3">Animal Record</h1>
       <Row gutter={20}>
         <Col span={8} xs={24} sm={24} lg={8}>
-        <Select
-    showSearch
+        <Form.Item
+            required
+            label="User Name"
+            name="name"
+            rules={[{ required: true }]}
+          >
+         
+          
+        <Select  
     placeholder="Select a person"
     optionFilterProp="children"
-    onChange={onChange}
-    onSearch={fetchUserList}
-    filterOption={(input, option) =>
-      (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
-    }
- ></Select>
- 
+    // onChange={onChange}
+    // onSearch={onSearch}
+    onSelect={onSelect}
+     options={users.map((person) => ({
+  value:  person._id,
+  label: person.name,
+}))}
+/>
+</Form.Item>
     </Col>
         
         <Col span={8} xs={24} sm={24} lg={8}>

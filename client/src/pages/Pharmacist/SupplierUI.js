@@ -63,7 +63,7 @@ function SupplierUI() {
                   record.contact,
                   record.address,
                   true,
-                  record.drugID
+                  record._id
                 )
               }
             >
@@ -92,7 +92,7 @@ function SupplierUI() {
          
     
           if (resposne.data.success) {
-            toast.success("Drug Updated Successfully");
+            toast.success("Supplier Updated Successfully");
           }
          
         } catch (error) {

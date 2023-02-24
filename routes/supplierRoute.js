@@ -50,7 +50,7 @@ router.post("/save-supplier", authMiddleware, async (req, res) => {
   router.post("/edit-supplier", authMiddleware, async (req, res) => {
     try {
       
-       await Sale.findOneAndUpdate({_id:req.body.supplierId},
+       await Supplier.findOneAndUpdate({_id:req.body.supplierId},
         {
             supplier: req.body.supplier,
             contact: req.body.contact,

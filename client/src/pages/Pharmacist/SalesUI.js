@@ -11,16 +11,16 @@ function SalesUI() {
   const [open, setOpen] = useState(false);
   const [sales, setSales] = useState([]);
   const [productname, setProductName] = useState("");
-  const [customer, setCustomer] = useState("");
+  const [customername, setCustomerName] = useState("");
   const [date1, setDate] = useState("");
   const [quantity, setQuantity] = useState("");
   const [isEdit, setIsEdit] = useState(false)
   const [salesId, setSalesId] = useState("")
 
-  const viewModal = (ProductName,Customer,date,Quantity,SalesId,Editable) => {
+  const viewModal = (ProductName,CustomerName,date,Quantity,SalesId,Editable) => {
     setOpen(true)
     setProductName(ProductName);
-    setCustomer(Customer)
+    setCustomerName(CustomerName)
     setDate(date)
     setQuantity(Quantity)
     setIsEdit(Editable);
@@ -64,7 +64,7 @@ function SalesUI() {
                 viewModal(
                   
                   record.productname,
-                  record.customer,
+                  record.customername,
                   record.date1,
                   record.quantity,
                   
@@ -86,7 +86,7 @@ function SalesUI() {
 
           { salesId:salesId,
             productname:productname,
-            customer:customer,
+            customername:customername,
             date1:date1,
             quantity:quantity,
             
@@ -114,7 +114,7 @@ function SalesUI() {
 
             { 
                productname: productname,
-               customername: customer,
+               customername: customername,
                date1:date1,
               quantity: quantity,
              
@@ -203,7 +203,7 @@ return (
     <hr />
     <Table columns={columns}  dataSource={sales} />
     <Modal    destroyOnClose={true}
-        title={isEdit ?  "Add a new sales" :"Edit Sales"}
+        title={isEdit ?  "Edit Sales": "Add a new sales"}
         centered
         visible={open}  
         
@@ -233,8 +233,8 @@ return (
         className="w-full"
         style={{marginLeft:"10px" ,width:"90%"}}
           type="text"
-          onChange={(e) => setCustomer (e.target.value)}
-          value={customer }
+          onChange={(e) => setCustomerName (e.target.value)}
+          value={customername }
           rules={[{ required: true }]}
         />
                                             </div>
