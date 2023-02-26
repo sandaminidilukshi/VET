@@ -149,6 +149,24 @@ router.post(
   }
 );
 
-
+router.post("/get-patient-info-by-id", authMiddleware, async (req, res) => {
+  try {
+    const user = await User.findById(req.body.value );
+    
+   
+      res.status(200).send({
+        message: "User fetched successfully",
+        success: true,
+        data: user,
+      });
+    } catch (error) {
+      console.log(error);
+      res.status(500).send({
+        message: "Error fetching doctor",
+        success: false,
+        error,
+      });
+    }
+  });
 
 module.exports = router;

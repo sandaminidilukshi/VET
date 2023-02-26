@@ -1,4 +1,4 @@
-import { Button, Col, Form, Input, Row, TimePicker } from "antd";
+import { Button, Col, Collapse, Form, Input, Row, Space, TimePicker } from "antd";
 import axios, { Axios } from "axios";
 import React, { useEffect, useState } from "react";
 import toast from "react-hot-toast";
@@ -7,9 +7,10 @@ import Layout from "../../components/Layout";
 import { Select } from 'antd';
 
 function Records() {
-  
+  const { Panel } = Collapse;
   const { user } = useSelector((state) => state.user);
   const [animalList, setAnimalList] = useState([])
+  const [userInfo, setUserInfo] = useState([])
   const [userList, setUserList] = useState([])
   const [userName, setUserName] = useState('')
   const [doctorName, setDoctorName] = useState('')
@@ -27,13 +28,10 @@ function Records() {
   const [evening, setEvening] = useState('')
   const [durationDosage, setDurationDosage] = useState('')  
   const [advices, setAdvices] = useState('')
-
-  const onChange = (value) => {
-    console.log(`Changed ${value}`);
-  };
   
   const onSelect = (value) => {
-    console.log('selected:', value);
+   getUserInfoById(value);
+    getAnimalsData(value);
   };
 
   const submitHandler = async(e)=>{
@@ -85,7 +83,7 @@ function Records() {
       
     }
   }
- 
+ //get all patients 
   const getPatientsData = async () => {
     try {
       
@@ -110,7 +108,7 @@ function Records() {
     try {
       
       const resposne = await axios.post(
-        "/api/animal/get-animal-info-by-user-id",
+        "/api/animal/get-animals-by-userId",
         {
           userId:value
         },
@@ -129,14 +127,34 @@ function Records() {
     }
   };
 
+ //get relevant user information by ID
+  const  getUserInfoById = async (value) => {
+    try {
+      console.log("value",value)
+      const resposne = await axios.post(
+        "/api/admin/get-patient-info-by-id",
+        {
+          value
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      );
+     
+      if (resposne.data.success) {
+        setUserInfo(resposne.data.data);
+      }
+    } catch (error) {
+      
+    }
+  };
   useEffect(() => {
-    
-    
-  
     getPatientsData();
-
- 
+    
   }, [])
+
   
 return (<Layout>
     <Form layout="vertical" onFinish={submitHandler}> 
@@ -157,7 +175,7 @@ return (<Layout>
     optionFilterProp="children"
     // onChange={onChange}
     // onSearch={onSearch}
-    onSelect={getAnimalsData}
+    onSelect={onSelect}
      options={userList.map((person) => ({
   value:  person._id,
   label: person.name,
@@ -165,17 +183,34 @@ return (<Layout>
 />
 </Form.Item>
     </Col>
-        
-        <Col span={8} xs={24} sm={24} lg={8}>
-          <Form.Item
-            required
-            label="Animal Type"
-            name="animalType"
-            rules={[{ required: true }]}
+    <Col span={8} xs={24} sm={24} lg={8}>
+    <Form.Item
+            readOnly
+            label="Email"
+           
+            
           >
-            <Input placeholder="Animal Type" onChange={(e)=>(setAnimalType(e.target.value))}/>
-          </Form.Item>
-        </Col>
+    <Input value={userInfo.email} />
+        {/* <p>Email : {userInfo.email}</p>
+        <p>Contact No : {userInfo.phoneno}</p>
+      */}
+      </Form.Item>
+    </Col>
+    
+    <Col span={8} xs={24} sm={24} lg={8}>
+    <Form.Item
+            readOnly
+            label="Contact No"
+           disabled
+          >
+    <Input value={userInfo.phoneno} />
+        {/* <p>Email : {userInfo.email}</p>
+        <p>Contact No : {userInfo.phoneno}</p>
+      */}
+      </Form.Item>
+    </Col>
+    </Row>
+    <Row gutter={20}>
         <Col span={8} xs={24} sm={24} lg={8}>
           <Form.Item
             required
@@ -183,8 +218,24 @@ return (<Layout>
             name="animalName"
             rules={[{ required: true }]}
           >
-            <Input placeholder="Animal Name" onChange={(e)=>(setAnimalName(e.target.value))}/>
-          </Form.Item>
+            <Select  
+    placeholder="Select an animal"
+    optionFilterProp="children"
+    // onChange={onChange}
+    // onSearch={onSearch}
+    onSelect={onSelect}
+     options={animalList.map((pet) => ({
+     
+  value:  pet._id,
+  label: pet.animalName,
+})
+)
+
+
+}
+
+/>
+</Form.Item>
         </Col>
         </Row>
         <hr />
@@ -325,12 +376,17 @@ return (<Layout>
         </Col>
         </Row>
 
+        <div className="d-flex justify-content-start">
+        <Button className="primary-button" htmlType="submit"  >
+         Continue to Prescription
+        </Button>
+      </div>
 
-      <div className="d-flex justify-content-end">
+      {/* <div className="d-flex justify-content-mid">
         <Button className="primary-button" htmlType="submit"  >
           SUBMIT
         </Button>
-      </div>
+      </div> */}
     </Form>
     </Layout>
   );
