@@ -44,11 +44,12 @@ const prescriptionSchema = new mongoose.Schema(
         },
         medicines: [
           {
-            medicineName: {
-              type: String,
-            },
-          
+             
+           
             dosage: {
+              medicineName: {
+                type: String,
+              },
               morning: {
                 
                   type: String,

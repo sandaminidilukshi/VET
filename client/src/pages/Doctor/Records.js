@@ -5,6 +5,7 @@ import toast from "react-hot-toast";
 import { useSelector } from "react-redux";
 import Layout from "../../components/Layout";
 import { Select } from 'antd';
+import { useNavigate } from "react-router-dom";
 
 function Records() {
   const { Panel } = Collapse;
@@ -28,22 +29,38 @@ function Records() {
   const [evening, setEvening] = useState('')
   const [durationDosage, setDurationDosage] = useState('')  
   const [advices, setAdvices] = useState('')
-  
-  const onSelect = (value) => {
+  const [animal, setAnimal] = useState([])
+  const [drugList, setDrugList] = useState([])
+  const [drug, setDrug] = useState('')
+  const navigate = useNavigate();
+
+  //get the value of selected user
+  const onSelectUser = (value) => {
    getUserInfoById(value);
-    getAnimalsData(value);
+   getAnimalsData(value);
   };
 
+  //get the value of selected animal
+  const onSelectAnimal = (value) => {
+    getAnimalInfoById(value);
+   };
+
+   //get the value of selected animal
+  const onSelectDrug = (value) => {
+    setDrug(value);
+   };
+
+  
   const submitHandler = async(e)=>{
    
     try {
       const {data} = await axios.post('/api/prescription/save-prescription',
      {
         
-          "user": userName,
+          "user": userInfo.name,
             "doctor": user?.name,
-            "animalName": animalName,
-            "animaltype": animalType,
+            "animalName": animal.animalName,
+            "animaltype": animal.animalType,
             "chiefComplaints": {
               complaint:complaint,
               duration:durationComplaints,
@@ -55,9 +72,10 @@ function Records() {
             "procedureConducted": procedureConducted,
             "medicines": [
                 {
-                  "medicineName":medicineName,
-                
+                  
+                  
                   "dosage": {
+                    "medicineName":drug,
                     "morning": morning,
                     "afternoon": afternoon,
                     "evening": evening,
@@ -118,7 +136,7 @@ function Records() {
           },
         }
       );
-     
+      setAnimalList([""])
       if (resposne.data.success) {
         setAnimalList(resposne.data.data);
       }
@@ -130,7 +148,6 @@ function Records() {
  //get relevant user information by ID
   const  getUserInfoById = async (value) => {
     try {
-      console.log("value",value)
       const resposne = await axios.post(
         "/api/admin/get-patient-info-by-id",
         {
@@ -150,9 +167,57 @@ function Records() {
       
     }
   };
+//get animal information by animal ID
+  const  getAnimalInfoById = async  (value)=> {
+    try {
+      const resposne = await axios.post(
+        "/api/animal/get-animal-by-Id",
+        {
+          animalId:value
+        },
+
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      );
+      if (resposne.data.success) {
+        setAnimal(resposne.data.data);
+        console.log(animal)
+      }
+    } catch (error) {
+      
+    }
+  };
+
+  //get all drugs
+  const getDrugsData = async () => {
+    try {
+      
+      const response = await axios.get("/api/drugs/get-all-drugs", {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
+
+      if (response.data.success) {
+      console.log("drugs", response.data.data);
+
+        setDrugList(response.data.data);
+      }
+     
+    } catch (error) {
+      
+    }
+  };
+
+
+
+  
   useEffect(() => {
     getPatientsData();
-    
+    getDrugsData();
   }, [])
 
   
@@ -165,17 +230,18 @@ return (<Layout>
         <Form.Item
             required
             label="User Name"
-            name="name"
+            name="user"
             rules={[{ required: true }]}
           >
          
           
         <Select  
+        allowClear={true}
     placeholder="Select a person"
     optionFilterProp="children"
     // onChange={onChange}
     // onSearch={onSearch}
-    onSelect={onSelect}
+    onSelect={onSelectUser}
      options={userList.map((person) => ({
   value:  person._id,
   label: person.name,
@@ -185,12 +251,12 @@ return (<Layout>
     </Col>
     <Col span={8} xs={24} sm={24} lg={8}>
     <Form.Item
-            readOnly
-            label="Email"
            
+            label="Email"
+          
             
           >
-    <Input value={userInfo.email} />
+    <Input readOnly value={userInfo.email} />
         {/* <p>Email : {userInfo.email}</p>
         <p>Contact No : {userInfo.phoneno}</p>
       */}
@@ -199,11 +265,11 @@ return (<Layout>
     
     <Col span={8} xs={24} sm={24} lg={8}>
     <Form.Item
-            readOnly
+          
             label="Contact No"
-           disabled
+           
           >
-    <Input value={userInfo.phoneno} />
+    <Input readOnly value={userInfo.phoneno} />
         {/* <p>Email : {userInfo.email}</p>
         <p>Contact No : {userInfo.phoneno}</p>
       */}
@@ -216,14 +282,15 @@ return (<Layout>
             required
             label="Animal Name"
             name="animalName"
-            rules={[{ required: true }]}
+         
           >
             <Select  
+            allowClear={true}
     placeholder="Select an animal"
     optionFilterProp="children"
     // onChange={onChange}
     // onSearch={onSearch}
-    onSelect={onSelect}
+    onSelect={onSelectAnimal}
      options={animalList.map((pet) => ({
      
   value:  pet._id,
@@ -237,6 +304,16 @@ return (<Layout>
 />
 </Form.Item>
         </Col>
+        <Col span={8} xs={24} sm={24} lg={8}>
+    <Form.Item
+          
+            label="Animal Type"
+           
+          >
+    <Input  readOnly value={animal.animalType} />
+       
+      </Form.Item>
+    </Col>
         </Row>
         <hr />
         <h2 className="card-title mt-3">Chief Complaints</h2>
@@ -315,9 +392,19 @@ return (<Layout>
             required
             label="Medicine Name"
             name="medicineName"
-            rules={[{ required: true }]}
           >
-            <Input placeholder="Medicine Name"  onChange={(e)=>(setMedicineName(e.target.value))}/>
+            <Select  
+        allowClear={true}
+    placeholder="Select a drug"
+    optionFilterProp="children"
+    // onChange={onChange}
+    // onSearch={onSearch}
+    onSelect={onSelectDrug}
+     options={drugList.map((drug) => ({
+  value:  drug._id,
+  label: drug.productname,
+}))}
+/>
           </Form.Item>
         </Col>
         </Row>
@@ -376,17 +463,18 @@ return (<Layout>
         </Col>
         </Row>
 
-        <div className="d-flex justify-content-start">
-        <Button className="primary-button" htmlType="submit"  >
-         Continue to Prescription
+        {/* <div className="d-flex justify-content-start">
+        <Button className="primary-button" htmlType="submit" >
+         Save Records
         </Button>
-      </div>
+      </div> */}
+ {/* onClick={() => navigate(`/calculateBill`)} */}
 
-      {/* <div className="d-flex justify-content-mid">
+      <div className="d-flex justify-content-mid">
         <Button className="primary-button" htmlType="submit"  >
           SUBMIT
         </Button>
-      </div> */}
+      </div>
     </Form>
     </Layout>
   );

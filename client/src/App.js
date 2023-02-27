@@ -43,6 +43,7 @@ import NavigateSupplierUI from "./pages/NavigateSupplierUI";
 import NavigateReceivingUI from "./pages/NavigateReceivingUI";
 import NavigateExpiredUI from "./pages/NavigateExpiredUI";
 import AnimalDetails from "./pages/AnimalDetails";
+import BillingPayment from "./pages/Doctor/BillingPayment"
 
 function App() {
   const { loading } = useSelector((state) => state.alerts);
@@ -362,7 +363,14 @@ function App() {
               <NavigateExpiredUI/>
             </ProtectedRoute>
           }
-        />
+        /><Route
+        path="/calculateBill"
+        element={
+          <ProtectedRoute>
+            <BillingPayment/>
+          </ProtectedRoute>
+        }
+      />
       </Routes>
     </BrowserRouter>
   );

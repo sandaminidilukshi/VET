@@ -6,7 +6,7 @@ const authMiddleware = require("../middlewares/authMiddleware");
 const Appointment = require("../models/appointmentModel");
 const Drug = require("../models/drugModel");
 
-router.post("/save-drug", authMiddleware, async (req, res) => {
+router.post("/save-drug",  async (req, res) => {
     try {
       const newDrug = new Drug({
        productname: req.body.productname,

@@ -80,6 +80,20 @@ router.post("/save-animal", authMiddleware, async (req, res) => {
         .send({ message: "Error getting animal info", success: false, error });
     }
   });
-  
+  //get animal info by  animal ID
+  router.post("/get-animal-by-animal-Id",  async (req, res) => {
+    try {
+      const animal = await Animal.find({_id:req.body.animalId});
+      res.status(200).send({
+        success: true,
+        message: "Animal info fetched successfully",
+        data: animal,
+      });
+    } catch (error) {
+      res
+        .status(500)
+        .send({ message: "Error getting animal info", success: false, error });
+    }
+  });
 
   module.exports = router;
