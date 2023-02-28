@@ -4,12 +4,13 @@ import Layout from "../components/Layout";
 import { showLoading, hideLoading } from "../redux/alertsSlice";
 import { toast } from "react-hot-toast";
 import axios from "axios";
-import { Table } from "antd";
+import { Button, Table } from "antd";
 import moment from "moment";
-
+import swal from 'sweetalert';
 function Appointments() {
   const [appointments, setAppointments] = useState([]);
   const dispatch = useDispatch();
+
   const getAppointmentsData = async () => {
     try {
       dispatch(showLoading());
@@ -26,6 +27,80 @@ function Appointments() {
       dispatch(hideLoading());
     }
   };
+
+  const changeAppointmentStatus = async (record, status) => {
+    swal({
+      title: "Are you sure?",
+      text: "Once deleted, you will not be able to recover these details !",
+      icon: "warning",
+      buttons: true,
+      dangerMode: true,
+  }).then(async (willDelete) => {
+    if (willDelete){try {
+      dispatch(showLoading());
+      const resposne = await axios.post(
+        "/api/doctor/change-appointment-status",
+        { appointmentId : record._id, status: status },
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+        
+      );
+      dispatch(hideLoading());
+      if (resposne.data.success) {
+        toast.success(resposne.data.message);
+        getAppointmentsData();
+      }
+    } catch (error) {
+
+      toast.error("Error changing doctor account status");
+      dispatch(hideLoading());
+    }
+    swal("Product has been removed!", {
+      icon: "success",
+  });
+  }})
+    
+    
+  };
+ 
+  // const changeAppointmentStatus = async (record, status) => {
+  //   try {
+  //     dispatch(showLoading());
+  //     const resposne = await axios.post(
+  //       "/api/user/change-appointment-status-by-user-role",
+  //       { appointmentId : record._id, status: status },
+  //       {
+  //         headers: {
+  //           Authorization: `Bearer ${localStorage.getItem("token")}`,
+  //         },
+  //       }
+        
+  //     );
+  //     dispatch(hideLoading());
+  //     if (resposne.data.success) {
+  //       toast.success(resposne.data.message);
+  //       getAppointmentsData();
+  //     }
+  //   } catch (error) {
+  //     toast.error("Error changing doctor account status");
+  //     dispatch(hideLoading());
+  //   }
+  // };
+
+  // const changeAppointmentStatus = async (record, status) => {
+  //   try {
+  //     dispatch(showLoading());
+  //     const resposne = 
+  //   }
+  // };
+
+  
+
+  
+  
   const columns = [
     {
         title: "Id",
@@ -61,7 +136,27 @@ function Appointments() {
     {
         title: "Status",
         dataIndex: "status",
-    }
+    },
+
+    {
+      title: "Actions",
+      dataIndex: "",
+      render: (text, record) => (<div className="d-flex">
+      {record.status === "approved" && (
+        <div className="d-flex">
+          <Button
+            className="anchor"
+            danger
+            onClick={() => changeAppointmentStatus(record, "Cancelled")}
+          >
+           Delete  
+          </Button>
+        </div>
+      )}
+    </div>
+        
+      ),
+    },
   ];
   useEffect(() => {
     getAppointmentsData();

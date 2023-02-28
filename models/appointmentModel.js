@@ -30,6 +30,10 @@ const appointmentSchema = new mongoose.Schema(
       required: true,
       default: "pending",
     },
+    // isCancelled: {
+    //   type: Boolean,
+    //   required: false,
+    // },
   },
   {
     timestamps: true,

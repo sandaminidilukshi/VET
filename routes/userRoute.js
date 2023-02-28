@@ -217,6 +217,7 @@ router.get("/get-all-approved-doctors", authMiddleware, async (req, res) => {
 
 router.post("/book-appointment", authMiddleware, async (req, res) => {
   try {
+    
     req.body.status = "pending";
     req.body.date = moment(req.body.date, "DD-MM-YYYY").toISOString();
     req.body.time = moment(req.body.time, "HH:mm").toISOString();
@@ -257,7 +258,7 @@ router.post("/check-booking-avilability", authMiddleware, async (req, res) => {
       date,
       time: { $gte: fromTime, $lte: toTime },
     });
-    if (appointments.length > 0) {      //isCancelled = false
+    if (appointments.length > 0  && appointments[0].status!="Cancelled") {      //isCancelled = false
       return res.status(200).send({
         message: "Appointments not available",
         success: false,
@@ -345,4 +346,31 @@ router.get("/get-all-appointments", authMiddleware, async (req, res) => {
     });
   }
 });
+
+router.post("/change-appointment-status-by-user-role", authMiddleware, async (req, res) => {
+  try {
+    const { appointmentId, status } = req.body;
+    const appointment = await Appointment.findByIdAndUpdate(appointmentId, {
+      status,
+    });
+
+    const user = await User.findOne({ _id: appointment.userId });
+    
+
+    await user.save();
+
+    res.status(200).send({
+      message: "Appointment status updated successfully",
+      success: true
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({
+      message: "Error changing appointment status",
+      success: false,
+      error,
+    });
+  }
+});
+
 module.exports = router;

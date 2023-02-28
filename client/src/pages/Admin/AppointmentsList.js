@@ -92,13 +92,13 @@ function AdminChangeAppointmentStatus() {
                 className="anchor px-2"
                 onClick={() => changeAppointmentStatus(record, "Remain")}
               >
-                Approve
+                Remain
               </h1>
               <h1
                 className="anchor"
-                onClick={() => changeAppointmentStatus(record, "Cancel")}
+                onClick={() => changeAppointmentStatus(record, "Cancelled")}
               >
-                Reject
+                Cancel
               </h1>
             </div>
           )}
