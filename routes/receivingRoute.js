@@ -3,7 +3,6 @@ const router = express.Router();
 const Doctor = require("../models/doctorModel");
 const Prescription = require("../models/prescriptionModel")
 const authMiddleware = require("../middlewares/authMiddleware");
-const Appointment = require("../models/appointmentModel");
 const Receive = require("../models/receivingModel");
 
 router.post("/save-receiving", async (req, res) => {

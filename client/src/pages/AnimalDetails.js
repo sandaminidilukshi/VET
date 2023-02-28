@@ -8,7 +8,6 @@ import axios from "axios";
 import { Navigate, useNavigate, useParams } from "react-router-dom";
 import DoctorForm from "../components/DoctorForm";
 import moment from "moment";
-import ViewAppointments from "./ViewAppointments";
 import AnimalSideBar from "../components/AnimalSideBar";
 
 function AnimalDetails() {

@@ -257,7 +257,7 @@ router.post("/check-booking-avilability", authMiddleware, async (req, res) => {
       date,
       time: { $gte: fromTime, $lte: toTime },
     });
-    if (appointments.length > 0) {
+    if (appointments.length > 0) {      //isCancelled = false
       return res.status(200).send({
         message: "Appointments not available",
         success: false,

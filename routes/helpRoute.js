@@ -100,35 +100,8 @@ router.post("/get-help-requests-by-user", async (req, res) => {
 });
 
 
-// router.post("/update-reply", authMiddleware, async (req, res) => {
-//   try {
-//     const { doctorId, reply } = req.body;
-//     const replynew = await HelpRequest.findByIdAndUpdate(appointmentId, {
-//       reply,
-//     });
 
-//     const user = await User.findOne({ _id: replynew.userId });
-//     const unseenNotifications = user.unseenNotifications;
-//     unseenNotifications.push({
-//       type: "reply-ssent",
-//       message: ` ${reply}`,
-//       onClickPath: "/HelpCentre",
-//     });
 
-  //   await user.save();
-
-  //   res.status(200).send({
-  //     message: "Appointment status updated successfully",
-  //     success: true
-  //   });
-  // } catch (error) {
-  //   console.log(error);
-  //   res.status(500).send({
-  //     message: "Error changing appointment status",
-  //     success: false,
-  //     error,
-  //   });
-  // }
-// });
+  
 
 module.exports = router;
