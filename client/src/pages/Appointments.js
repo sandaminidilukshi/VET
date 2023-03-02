@@ -31,7 +31,7 @@ function Appointments() {
   const changeAppointmentStatus = async (record, status) => {
     swal({
       title: "Are you sure?",
-      text: "Once deleted, you will not be able to recover these details !",
+      text: "Your appointment will be cancelled!",
       icon: "warning",
       buttons: true,
       dangerMode: true,
@@ -58,7 +58,7 @@ function Appointments() {
       toast.error("Error changing doctor account status");
       dispatch(hideLoading());
     }
-    swal("Product has been removed!", {
+    swal("Appointment has been cancelled!", {
       icon: "success",
   });
   }})

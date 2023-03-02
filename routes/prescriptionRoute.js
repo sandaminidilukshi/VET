@@ -5,15 +5,14 @@ const Prescription = require("../models/prescriptionModel")
 const authMiddleware = require("../middlewares/authMiddleware");
 const User = require("../models/userModel");
 
-
-
-
 router.post("/save-prescription", authMiddleware, async (req, res) => {
   try {
     const newPrescription = new Prescription({
       user: req.body.user,
+      userId:req.body.userId,
       doctor: req.body.doctor,
       animalName: req.body.animalName,
+      animalId: req.body.animalId,
       animaltype: req.body.animaltype,
       chiefComplaints: req.body.chiefComplaints,
       notes: req.body.notes,
@@ -43,6 +42,24 @@ router.get("/get-all-records", async (req, res) => {
     const prescription = await Prescription.find({});
     res.status(200).send({
       message: "Animal records fetched successfully",
+      success: true,
+      data: prescription,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({
+      message: "Error getting animal records",
+      success: false,
+      error,
+    });
+  }
+});
+
+router.post("/get-animal-records-by-animal-ID", async (req, res) => {
+  try {
+    const prescription = await Prescription.find({animalId:req.body.animalId});
+    res.status(200).send({
+      message: "Animal records by Id fetched successfully",
       success: true,
       data: prescription,
     });

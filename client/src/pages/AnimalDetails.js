@@ -11,9 +11,75 @@ import moment from "moment";
 import AnimalSideBar from "../components/AnimalSideBar";
 
 function AnimalDetails() {
-
+  const [viewRecords, setViewRecords] = useState(false)
+  const [records, setRecords] = useState([])
   const [animal, setAnimal] = useState(null);
   const params = useParams();
+
+  const columns = [
+    {
+        title: "Id",
+        dataIndex: "_id",
+    },
+    {
+      title: "Date & Time",
+      dataIndex: "createdAt",
+      render: (text, record) => (
+        <span>
+          {moment(record.date).format("DD-MM-YYYY")} {moment(record.time).format("HH:mm")}
+        </span>
+      ),
+    },
+    {
+      title: "Doctor",
+      dataIndex: "doctor",
+      render: (text, record) => (
+        <span>
+          {record.doctor}
+        </span>
+      ),
+    },
+    {
+      title: "Complaint",
+      dataIndex: "complaint",
+      render: (text, record) => (
+        <span>
+          {record.chiefComplaints.complaint} 
+        </span>
+      ),
+    },
+    
+    {
+        title: "Notes",
+        dataIndex: "notes",
+    },
+
+    {
+      title: "Diagnosis",
+      dataIndex: "diagnosis",
+      render: (text, record) => (
+        <span>
+          {record.diagnosis} 
+        </span>
+      ),
+   
+        
+      
+    },
+    {
+      title: "Advices",
+      dataIndex: "advices",
+      render: (text, record) => (
+        <span>
+          {record.advices} 
+        </span>
+      ),
+   
+        
+      
+    },
+  ];
+
   const dispatch = useDispatch();
   
   const getAnimalData = async () => {
@@ -41,10 +107,38 @@ function AnimalDetails() {
     }
   };
   
+//get animal records by animal id
+const animalId= params.animalId
+
+  const getAnimalRecords = async () => {
+    try {
+      dispatch(showLoading());
+      const resposne = await axios.post("/api/prescription/get-animal-records-by-animal-ID",
+      {
+        animalId
+    },
+      {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
+      
+      dispatch(hideLoading());
+      
+      if (resposne.data.success) {
+        setRecords(resposne.data.data);
+      }
+      console.log("records",resposne.data.data)
+      console.log("recordmed",resposne.data.data[0].medicines[0].medicineName)
+    } catch (error) {
+      dispatch(hideLoading());
+    }
+  };
  
 
   useEffect(() => {
     getAnimalData();
+    getAnimalRecords();
   }, []);
 
  
@@ -95,7 +189,7 @@ function AnimalDetails() {
                
                   <Button
                     className="primary-button mt-3 full-width-button"
-                    //onClick={bookNow}
+                    onClick={() => {setViewRecords(true)}}
                   >
                     View Records
                   </Button>
@@ -109,6 +203,12 @@ function AnimalDetails() {
         
    
    </div>
+
+<div>{viewRecords?
+<Table
+columns={columns}  dataSource={records}>
+</Table> :null}
+</div>
     </AnimalSideBar>
   );
 }

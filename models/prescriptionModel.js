@@ -5,6 +5,11 @@ const prescriptionSchema = new mongoose.Schema(
          type: String,
          required: true,
         },
+        userId:{
+          type: String,
+          required: false,
+         
+        },
         doctor: {
           type: String,
           required: [true, "Please enter Doctor Name"], 
@@ -13,6 +18,11 @@ const prescriptionSchema = new mongoose.Schema(
         animalName: {
           type: String,
           required: [true, "Please enter animal type"],
+         
+        },
+        animalId:{
+          type: String,
+          required: false,
          
         },
         animaltype: {

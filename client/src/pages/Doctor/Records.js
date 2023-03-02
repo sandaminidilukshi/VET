@@ -1,4 +1,4 @@
-import { Button, Col, Collapse, Form, Input, Row, Space, TimePicker } from "antd";
+import { Button, Col, Collapse, Divider, Form, Input, Row, Space, TimePicker } from "antd";
 import axios, { Axios } from "axios";
 import React, { useEffect, useState } from "react";
 import toast from "react-hot-toast";
@@ -58,8 +58,10 @@ function Records() {
      {
         
           "user": userInfo.name,
+          "userId":userInfo._id,
             "doctor": user?.name,
             "animalName": animal.animalName,
+            "animalId":animal._id,
             "animaltype": animal.animalType,
             "chiefComplaints": {
               complaint:complaint,
@@ -94,9 +96,10 @@ function Records() {
       }
       )
       
-
+      toast.success("Animal record saved successfully");
       //console.log(data)
-    } catch (err) {
+    } 
+    catch (err) {
       toast.error(err);
       
     }
@@ -469,12 +472,24 @@ return (<Layout>
         </Button>
       </div> */}
  {/* onClick={() => navigate(`/calculateBill`)} */}
-
+ <Divider orientation="left"></Divider>
+    <Row >
+      <Col className="gutter-row w-full" span={3}>
       <div className="d-flex justify-content-mid">
         <Button className="primary-button" htmlType="submit"  >
-          SUBMIT
+          Save Record
         </Button>
       </div>
+      </Col>
+      <Col className="gutter-row" span={6}>
+      <div className="d-flex justify-content-mid w-full">
+        <Button className="primary-button" onClick={() => navigate(`/calculateBill`)} >
+          Calculate Bill
+        </Button>
+      </div>
+      </Col>
+     </Row>
+     
     </Form>
     </Layout>
   );
