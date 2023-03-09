@@ -278,7 +278,7 @@ router.post("/check-booking-avilability", authMiddleware, async (req, res) => {
     });
   }
 });
-router.post("/get-booking-avilability-by-date", authMiddleware , async (req, res) => {
+router.post("/get-booking-avilability-by-date", async (req, res) => {
   try {
     
     const doctorId = req.body.doctorId;
@@ -311,6 +311,110 @@ router.post("/get-booking-avilability-by-date", authMiddleware , async (req, res
     });
   }
 });
+// router.post("/get-booking-avilability-by-doctor-id", async (req, res) => {
+//   try {
+    
+//     const doctorInfo.userId = req.body.userId;
+//     const date = moment(req.body.date, "DD-MM-YYYY").toISOString();
+//     const appointments = await Appointment.find({
+//      doctorInfo{userId},
+//       date
+    
+//     });
+//     if (appointments.length > 0) {
+//       return res.status(200).send({
+//         message: "Booked appointments",
+//         success: true,
+//         data:appointments
+//       });
+//     } else { 
+//       if (appointments.length === 0) {
+//       return res.status(200).send({
+//         message: "Appointments not booked",
+//         success: true,
+//         data:appointments
+//       });
+//     }}
+//   } catch (error) {
+//     console.log(error);
+//     res.status(500).send({
+//       message: "Error getting appointement information",
+//       success: false,
+//       error,
+//     });
+//   }
+// });
+// router.post("/get-appointments-sheduled-for-the-date",  async (req, res) => {
+//   try {
+//     const date ="2023-03-07T18:30:00.000Z"
+//     //moment(req.body.date, "DD-MM-YYYY").toISOString();
+//     const doctorId = "6390101a0ffe482b78ce8625"
+//     //req.body.doctorId;
+//     const appointments = await Appointment.find( {$and:[{doctorId:doctorId}, 
+//       {date:date}] } );
+    
+    
+//     //find({
+//     //   doctorId,
+//     //   date,
+//     //   time: { $gte: fromTime, $lte: toTime },
+//     // });
+//     if (appointments.length > 0 ) {     
+//       return res.status(200).send({
+//         message: "Available appointments for the day",
+//         success: false,
+//       });
+//     } else {
+//       return res.status(200).send({
+//         message: "Appointments not booked",
+//         success: true,
+//       });
+//     }
+//   } catch (error) {
+//     console.log(error);
+//     res.status(500).send({
+//       message: "Error getting appointments",
+//       success: false,
+//       error,
+//     });
+//   }
+// });
+
+
+// router.post("/get-appointments-sheduled-for-the-date",  async (req, res) => {
+//   try {
+//     var START_TIME = toISOString( moment().toDate())
+// var END_TIME = toISOString(moment().startOf('day').toString())
+    
+  
+//     const doctorId = req.body.doctorId;
+//     //const date = moment().toISOString();
+//     const appointments = await Appointment.$match( { 
+//       dt: { $gte: START_TIME, $lt: END_TIME}
+// });
+//     if (appointments.length > 0) {
+//       return res.status(200).send({
+//         message: "Booked Appointments For the Day",
+//         success: true,
+//         data:appointments
+//       });
+//     } else { 
+//       if (appointments.length === 0) {
+//       return res.status(200).send({
+//         message: "Appointments not booked for the day",
+//         success: true,
+//         data:appointments
+//       });
+//     }}
+//   } catch (error) {
+//     console.log(error);
+//     res.status(500).send({
+//       message: "Error getting appointement information",
+//       success: false,
+//       error,
+//     });
+//   }
+// });
 
 router.get("/get-appointments-by-user-id", authMiddleware, async (req, res) => {
   try {

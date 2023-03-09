@@ -1,4 +1,4 @@
-import { Button, Col, Collapse, Divider, Form, Input, Row, Space, TimePicker } from "antd";
+import { Button, Card, Col, Collapse, Divider, Form, Input, Row, Space, TimePicker } from "antd";
 import axios, { Axios } from "axios";
 import React, { useEffect, useState } from "react";
 import toast from "react-hot-toast";
@@ -6,6 +6,8 @@ import { useSelector } from "react-redux";
 import Layout from "../../components/Layout";
 import { Select } from 'antd';
 import { useNavigate } from "react-router-dom";
+import AppointmentsList from "./AppointmentList";
+import moment from "moment";
 
 function Records() {
   const { Panel } = Collapse;
@@ -14,7 +16,7 @@ function Records() {
   const [userInfo, setUserInfo] = useState([])
   const [userList, setUserList] = useState([])
   const [userName, setUserName] = useState('')
-  const [doctorName, setDoctorName] = useState('')
+  const [doctor, setDoctor] = useState([])
   const [animalType, setAnimalType] = useState('')
   const [animalName, setAnimalName] = useState('')
   const [complaint, setComplaint] = useState('')
@@ -32,8 +34,14 @@ function Records() {
   const [animal, setAnimal] = useState([])
   const [drugList, setDrugList] = useState([])
   const [drug, setDrug] = useState('')
+  const [appointments, setAppointments] = useState([])
+  const date = moment(new Date()).format("DD-MM-YYYY")
   const navigate = useNavigate();
-
+ 
+  // var dateTime = moment().toDate();
+  // console.log("date",dateTime)
+  // var now = moment().startOf('day').toString();
+  // console.log("now",now)
   //get the value of selected user
   const onSelectUser = (value) => {
    getUserInfoById(value);
@@ -215,18 +223,98 @@ function Records() {
     }
   };
 
+//get doctor info by id
+const getDoctorData = async () => {
+  try {
+   
+    const response = await axios.post(
+      "/api/doctor/get-doctor-info-by-user-id",
+      {
+        userId:user?._id
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      }
+    );
 
+    
+    if (response.data.success) {
+      console.log(response.data)
+      setDoctor(response.data.data);
+      
+    }
+  } catch (error) {
+    console.log(error);
+    
+  }
+};
 
+//get appointments scheduled for the day
+  const getAppointmentsData = async (value) => {
+    try {
+     
+      const resposne = await axios.post(
+        "/api/user/get-booking-avilability-by-date",
+        {
+        doctorId:doctor._id,
+          date:date,
+          
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      );
+    
+      if (resposne.data.success) {
+        setAppointments(resposne.data);
+      }
+    } catch (error) {
+      
+    }
+  };
   
   useEffect(() => {
     getPatientsData();
     getDrugsData();
+    getDoctorData();
+    
   }, [])
 
   
 return (<Layout>
     <Form layout="vertical" onFinish={submitHandler}> 
-   
+    <div>
+      <Row>
+    <Card
+    title="Ongoing Appointment"
+    bordered={true}
+    style={{
+      width: 300,
+    }}
+  >
+    <p>Date : 2023/03/03</p>
+    <p>Client Name :  Chamuditha Bandara</p>
+    <p>Appointment Time : 20:00pm</p>
+  </Card>
+  <Card
+    title="Next Appointment"
+    bordered={true}
+    style={{
+      width: 300,
+    }}
+  >
+    <p>Date : 2023/03/03</p>
+    <p>Client Name :  Yasara Herath</p>
+    <p>Appointment Time : 21:00pm</p>
+  </Card>
+
+    
+  </Row>
+    </div>
       <h1 className="card-title mt-3">Animal Record</h1>
       <Row gutter={20}>
         <Col span={8} xs={24} sm={24} lg={8}>
@@ -485,6 +573,13 @@ return (<Layout>
       <div className="d-flex justify-content-mid w-full">
         <Button className="primary-button" onClick={() => navigate(`/calculateBill`)} >
           Calculate Bill
+        </Button>
+      </div>
+      </Col>
+      <Col className="gutter-row" span={6}>
+      <div className="d-flex justify-content-mid w-full">
+        <Button className="primary-button" onClick={getAppointmentsData}>
+          Appointments
         </Button>
       </div>
       </Col>
