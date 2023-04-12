@@ -44,6 +44,7 @@ import NavigateReceivingUI from "./pages/NavigateReceivingUI";
 import NavigateExpiredUI from "./pages/NavigateExpiredUI";
 import AnimalDetails from "./pages/AnimalDetails";
 import BillingPayment from "./pages/Doctor/BillingPayment"
+import PaymentCalculation from "./pages/Doctor/PaymentCalculation"
 
 function App() {
   const { loading } = useSelector((state) => state.alerts);
@@ -364,10 +365,10 @@ function App() {
             </ProtectedRoute>
           }
         /><Route
-        path="/calculateBill"
+        path="/calculateBill/:userId"
         element={
           <ProtectedRoute>
-            <BillingPayment/>
+            <PaymentCalculation/>
           </ProtectedRoute>
         }
       />

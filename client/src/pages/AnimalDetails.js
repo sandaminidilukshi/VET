@@ -14,8 +14,14 @@ function AnimalDetails() {
   const [viewRecords, setViewRecords] = useState(false)
   const [records, setRecords] = useState([])
   const [animal, setAnimal] = useState(null);
+  const [animalArray, setAnimalArray] = useState([])
   const params = useParams();
 
+  // const filtered = animalArray.find(obj => {
+  //   return obj.animalId === animalId;
+  // });
+
+  // console.log("filter",filtered)
   const columns = [
     {
         title: "Id",
@@ -127,9 +133,11 @@ const animalId= params.animalId
       
       if (resposne.data.success) {
         setRecords(resposne.data.data);
+        
       }
       console.log("records",resposne.data.data)
       console.log("recordmed",resposne.data.data[0].medicines[0].medicineName)
+      console.log("animals",animalArray)
     } catch (error) {
       dispatch(hideLoading());
     }

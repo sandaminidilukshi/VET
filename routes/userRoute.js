@@ -311,6 +311,47 @@ router.post("/get-booking-avilability-by-date", async (req, res) => {
     });
   }
 });
+
+
+router.post("/show-appointment-by-time", async (req, res) => {
+  try {
+    
+    const doctorId = req.body.doctorId;
+    const date = moment(req.body.date, "DD-MM-YYYY").toISOString();
+    const fromTime = moment(req.body.time, "HH:mm")
+      .subtract(1, "hours")
+      .toISOString();
+    const toTime = moment(req.body.time, "HH:mm").add(1, "hours").toISOString();
+    const appointments = await Appointment.find({
+      doctorId,
+      date,
+      time: { $gte: fromTime, $lte: toTime },
+    
+    });
+    if (appointments.length > 0) {
+      return res.status(200).send({
+        message: "Booked appointments",
+        success: true,
+        data:appointments
+      });
+    } else { 
+      if (appointments.length === 0) {
+      return res.status(200).send({
+        message: "Appointments not booked",
+        success: true,
+        data:appointments
+      });
+    }}
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({
+      message: "Error getting appointement information",
+      success: false,
+      error,
+    });
+  }
+});
+
 // router.post("/get-booking-avilability-by-doctor-id", async (req, res) => {
 //   try {
     

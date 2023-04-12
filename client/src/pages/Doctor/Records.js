@@ -1,4 +1,4 @@
-import { Button, Card, Col, Collapse, Divider, Form, Input, Row, Space, TimePicker } from "antd";
+import {  Button, Card, Col, Collapse, Divider, Form,  Input,  Row, Space, Steps, Table } from "antd";
 import axios, { Axios } from "axios";
 import React, { useEffect, useState } from "react";
 import toast from "react-hot-toast";
@@ -8,6 +8,7 @@ import { Select } from 'antd';
 import { useNavigate } from "react-router-dom";
 import AppointmentsList from "./AppointmentList";
 import moment from "moment";
+import { LoadingOutlined,SolutionOutlined, UserOutlined, UserOutlinedYYY } from '@ant-design/icons';
 
 function Records() {
   const { Panel } = Collapse;
@@ -34,15 +35,31 @@ function Records() {
   const [animal, setAnimal] = useState([])
   const [drugList, setDrugList] = useState([])
   const [drug, setDrug] = useState('')
-  const [appointments, setAppointments] = useState([])
+  const [appointment, setAppointment] = useState([])
+  const [current, setCurrent] = useState(0)
+  const [shouldRerender, setShouldRerender] = useState(false);
+  const [inputList, setinputList]= useState([{medicineName:'', morning:'',afternoon:'',evening:'',durationDosage:'',advices:''}]);
   const date = moment(new Date()).format("DD-MM-YYYY")
+  const time =moment().format("HH:mm")
   const navigate = useNavigate();
  
-  // var dateTime = moment().toDate();
-  // console.log("date",dateTime)
-  // var now = moment().startOf('day').toString();
-  // console.log("now",now)
-  //get the value of selected user
+  const handleinputchange=(e, index)=>{
+    const {name, value}= e.target;
+    const list= [...inputList];
+    list[index][name]= value;
+    setinputList(list);
+ 
+  }
+
+  const handleremove= index=>{
+    const list=[...inputList];
+    list.splice(index,1);
+    setinputList(list);
+  }
+  const handleaddclick=()=>{ 
+    setinputList([...inputList, { medicineName:'', morning:'',afternoon:'',evening:'',durationDosage:'',advices:''}]);
+  }
+
   const onSelectUser = (value) => {
    getUserInfoById(value);
    getAnimalsData(value);
@@ -58,7 +75,7 @@ function Records() {
     setDrug(value);
    };
 
-  
+
   const submitHandler = async(e)=>{
    
     try {
@@ -106,6 +123,7 @@ function Records() {
       
       toast.success("Animal record saved successfully");
       //console.log(data)
+      
     } 
     catch (err) {
       toast.error(err);
@@ -224,43 +242,20 @@ function Records() {
   };
 
 //get doctor info by id
-const getDoctorData = async () => {
+
+
+ 
+//get details of ongoing appointment
+const getOngoingAppointment = async () => {
   try {
-   
-    const response = await axios.post(
-      "/api/doctor/get-doctor-info-by-user-id",
-      {
-        userId:user?._id
-      },
-      {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-      }
-    );
-
     
-    if (response.data.success) {
-      console.log(response.data)
-      setDoctor(response.data.data);
-      
-    }
-  } catch (error) {
-    console.log(error);
-    
-  }
-};
-
-//get appointments scheduled for the day
-  const getAppointmentsData = async (value) => {
-    try {
-     
-      const resposne = await axios.post(
-        "/api/user/get-booking-avilability-by-date",
+    if(date && time ) {
+      const response = await axios.post(
+        "/api/user/show-appointment-by-time",
         {
-        doctorId:doctor._id,
-          date:date,
-          
+          doctorId:"6390106c0ffe482b78ce862b",
+          date: date,
+          time: time,
         },
         {
           headers: {
@@ -268,51 +263,112 @@ const getDoctorData = async () => {
           },
         }
       );
+
+      
+    if (response.data.success) {
+      toast.success(response.data.message);
+      setAppointment(response.data.data[0].userInfo);
+    } else {
+      toast.error(response.data.message);
+    }
+    } else {
+      
+      toast.error("No booked  appointments");
+    }
     
-      if (resposne.data.success) {
-        setAppointments(resposne.data);
+    
+  } catch (error) {
+    toast.error("Error booking appointment");
+    
+  }
+};
+
+console.log("appointment",appointment)
+useEffect(() => {
+  const getDoctorData = async () => {
+    try {
+     
+      const response = await axios.post(
+        "/api/doctor/get-doctor-info-by-user-id",
+        {
+          userId:user?._id
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      );
+  
+      
+      if (response.data.success) {
+        setDoctor(response.data.data);
+        console.log("doctor",)
+        
       }
     } catch (error) {
+      console.log(error);
       
     }
   };
-  
-  useEffect(() => {
     getPatientsData();
     getDrugsData();
     getDoctorData();
-    
-  }, [])
+    getOngoingAppointment();
+    //getAppointmentsData();
+     }, [])
 
-  
-return (<Layout>
+    //  useEffect(() => {
+     
+    //    }, [])
+
+useEffect(() => {
+      const intervalId = setInterval(() => {
+        getOngoingAppointment();
+      }, 3600000);
+    
+      return () => clearInterval(intervalId);
+    }, []);
+
+return(
+  <Layout>
+  <Steps 
+     onChange={setCurrent}
+     current={current} >
+    <Steps.Step title="Create Record" icon={<LoadingOutlined />}/>
+    <Steps.Step title="Calculate Bill" icon={<SolutionOutlined />}/>
+    <Steps.Step title="Confirm Bill" icon={<UserOutlined />}/>
+  </Steps>
+
+
+
     <Form layout="vertical" onFinish={submitHandler}> 
     <div>
       <Row>
+      
     <Card
     title="Ongoing Appointment"
     bordered={true}
     style={{
       width: 300,
     }}
+    
   >
-    <p>Date : 2023/03/03</p>
-    <p>Client Name :  Chamuditha Bandara</p>
-    <p>Appointment Time : 20:00pm</p>
-  </Card>
-  <Card
-    title="Next Appointment"
-    bordered={true}
-    style={{
-      width: 300,
-    }}
-  >
-    <p>Date : 2023/03/03</p>
-    <p>Client Name :  Yasara Herath</p>
-    <p>Appointment Time : 21:00pm</p>
+    {/* {appointment?
+  (<div>
+     <div className="d-flex justify-content-mid w-full">
+         <Button className="primary-button" onClick={getOngoingAppointment}>
+          Appointments
+        </Button> 
+      </div> */}
+   
+    <p>Client Name : {appointment.name} </p>
+    <p>Phone No. : {appointment.phoneno}</p>
+    {/* </div>):null} */}
   </Card>
 
-    
+ 
+
   </Row>
     </div>
       <h1 className="card-title mt-3">Animal Record</h1>
@@ -477,6 +533,12 @@ return (<Layout>
         </Row>
         <hr />
         <h2 className="card-title mt-3">Medicines</h2>
+       
+         { 
+            inputList.map( (x,i)=>{
+        return(
+        <div>
+          
       <Row gutter={20}>
         <Col span={8} xs={24} sm={24} lg={8}>
           <Form.Item
@@ -497,6 +559,9 @@ return (<Layout>
 }))}
 />
           </Form.Item>
+        </Col>
+        <Col>
+       
         </Col>
         </Row>
         <hr />
@@ -553,7 +618,19 @@ return (<Layout>
           </Form.Item>
         </Col>
         </Row>
-
+        
+        <div>
+        <Row><Col span={8} xs={24} sm={24} lg={8}>
+        { inputList.length-1===i && 
+        <Button className="primary-button" onClick={handleaddclick}>Add Medicine</Button>}
+        </Col>
+        
+        <Col span={8} xs={24} sm={24} lg={8}>  {
+                  inputList.length!==1 &&
+                  <Button className="primary-button" onClick={handleremove}>Remove Medicine</Button>}
+           </Col></Row></div>
+       
+        </div>)})}
         {/* <div className="d-flex justify-content-start">
         <Button className="primary-button" htmlType="submit" >
          Save Records
@@ -571,23 +648,21 @@ return (<Layout>
       </Col>
       <Col className="gutter-row" span={6}>
       <div className="d-flex justify-content-mid w-full">
-        <Button className="primary-button" onClick={() => navigate(`/calculateBill`)} >
+        <Button className="primary-button" onClick={() => navigate(`/calculateBill/${appointment._id}`)}>
           Calculate Bill
         </Button>
+        {/*  */}
       </div>
       </Col>
       <Col className="gutter-row" span={6}>
-      <div className="d-flex justify-content-mid w-full">
-        <Button className="primary-button" onClick={getAppointmentsData}>
-          Appointments
-        </Button>
-      </div>
+     
       </Col>
      </Row>
-     
+   
     </Form>
+   
     </Layout>
-  );
-}
+  );}
+
 
 export default Records;
