@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 const billSchema = new mongoose.Schema(
   {
-    clientId: {
+    userId: {
       type: String,
       required: false,
     },
@@ -9,6 +9,42 @@ const billSchema = new mongoose.Schema(
       type: String,
       required: false,
     },
+    recordId: {
+      type: String,
+      required: false,
+    },
+    medicines: [
+      {
+         
+       
+       
+          medicineName: {
+            type: String,
+            required: false,
+          },
+          morning: {
+            
+              type: String,
+              required: false,
+            
+          },
+          afternoon: {
+            
+              type: String,
+              required: false,
+            
+          },
+          evening: {
+            
+              type: String,
+              required: false,
+            },
+          
+        duration: {
+          type: String,
+          required: false,
+        }}],
+
     medicationFee: {
       type: String,
       required: false,
@@ -17,7 +53,11 @@ const billSchema = new mongoose.Schema(
       type: String,
       required: false,
     },
-    Total: {
+    taxRate: {
+      type: String,
+      required: false,
+    },
+    total: {
       type: String,
       required: false,
     },

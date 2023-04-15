@@ -27,6 +27,7 @@ router.post("/save-prescription", authMiddleware, async (req, res) => {
     res.status(200).send({
       success: true,
       message: "Record created successfully",
+      data:newPrescription
     });
   } catch (error) {
     console.log(error);

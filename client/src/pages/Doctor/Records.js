@@ -8,14 +8,15 @@ import { Select } from 'antd';
 import { useNavigate } from "react-router-dom";
 import AppointmentsList from "./AppointmentList";
 import moment from "moment";
-import { LoadingOutlined,SolutionOutlined, UserOutlined, UserOutlinedYYY } from '@ant-design/icons';
+import { CalculatorFilled, LoadingOutlined,SolutionOutlined, UserOutlined, UserOutlinedYYY } from '@ant-design/icons';
 
-function Records() {
+function Records(medicine) {
   const { Panel } = Collapse;
   const { user } = useSelector((state) => state.user);
   const [animalList, setAnimalList] = useState([])
   const [userInfo, setUserInfo] = useState([])
   const [userList, setUserList] = useState([])
+  const [records, setRecords] = useState([])
   const [userName, setUserName] = useState('')
   const [doctor, setDoctor] = useState([])
   const [animalType, setAnimalType] = useState('')
@@ -33,23 +34,31 @@ function Records() {
   const [durationDosage, setDurationDosage] = useState('')  
   const [advices, setAdvices] = useState('')
   const [animal, setAnimal] = useState([])
+  const [recordId, setRecordId] = useState('')
   const [drugList, setDrugList] = useState([])
-  const [drug, setDrug] = useState('')
+  const [drug, setDrug] = useState([])
   const [appointment, setAppointment] = useState([])
+  const [bill, setBill] = useState([])
   const [current, setCurrent] = useState(0)
   const [shouldRerender, setShouldRerender] = useState(false);
-  const [inputList, setinputList]= useState([{medicineName:'', morning:'',afternoon:'',evening:'',durationDosage:'',advices:''}]);
+  const [inputList, setinputList]= useState([{medicineName:'', morning:'',afternoon:'',evening:'',duration:''}]);
+  let medicineId = inputList.map((item) => item.medicineName);
+  console.log("medID")
   const date = moment(new Date()).format("DD-MM-YYYY")
   const time =moment().format("HH:mm")
   const navigate = useNavigate();
- 
   const handleinputchange=(e, index)=>{
     const {name, value}= e.target;
     const list= [...inputList];
-    list[index][name]= value;
+    list [index][name]= value;
     setinputList(list);
- 
+    
+ console.log("list  " , list)
+ console.log("inlist  " , inputList)
+
   }
+
+  
 
   const handleremove= index=>{
     const list=[...inputList];
@@ -57,7 +66,7 @@ function Records() {
     setinputList(list);
   }
   const handleaddclick=()=>{ 
-    setinputList([...inputList, { medicineName:'', morning:'',afternoon:'',evening:'',durationDosage:'',advices:''}]);
+    setinputList([...inputList, { medicineName:'', morning:'',afternoon:'',evening:'',duration:''}]);
   }
 
   const onSelectUser = (value) => {
@@ -71,15 +80,19 @@ function Records() {
    };
 
    //get the value of selected animal
-  const onSelectDrug = (value) => {
-    setDrug(value);
-   };
+  // const onSelectDrug = (value,event) => {
+  //   const e = {e:{target:{name:event.name,value:event.value}}}
+  //   setDrug(value);
+  //   console.log("value",value)
+  //   console.log("event",e)
+  //   handleinputchange(0,e);
+  //  };
 
 
   const submitHandler = async(e)=>{
    
     try {
-      const {data} = await axios.post('/api/prescription/save-prescription',
+      const response = await axios.post('/api/prescription/save-prescription',
      {
         
           "user": userInfo.name,
@@ -97,18 +110,16 @@ function Records() {
             "notes": notes,
             "diagnosis": diagnosis,
             "procedureConducted": procedureConducted,
-            "medicines": [
-                {
-                  
-                  
-                  "dosage": {
-                    "medicineName":drug,
-                    "morning": morning,
-                    "afternoon": afternoon,
-                    "evening": evening,
+            "medicines":inputList,
+
+                  // {I will do better and best in the future
+                  //   "medicineName":drug,
+                  //   "morning": morning,
+                  //   "afternoon": afternoon,
+                  //   "evening": evening,
                     
-                  "duration": durationDosage
-                  }}],
+                  // "duration": durationDosage
+                  // }
             "advices": advices
             
       }, 
@@ -119,9 +130,13 @@ function Records() {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
       }
-      )
-      
-      toast.success("Animal record saved successfully");
+      );
+      if (response.data.success) {
+        setRecords(response.data);
+        setRecordId(response.data.data._id)
+        toast.success("Animal record saved successfully");
+      }
+      console.log("records",recordId)
       //console.log(data)
       
     } 
@@ -129,7 +144,40 @@ function Records() {
       toast.error(err);
       
     }
-  }
+  };
+//send record ID,drugId,doctor Id and medicine array
+  const billDataSending = async(e)=>{
+   
+    try {
+      const response = await axios.post('/api/bill/calculation',
+     {
+      userId:userInfo._id,
+      doctorId:user?._id,
+      recordId:recordId,
+      medicines:inputList,
+      
+      }, 
+      
+    
+      {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      }
+      );
+      if (response.data.success) {
+        setBill(response.data);
+        toast.success("Bill record saved successfully");
+      }
+      console.log("bill",bill)
+      //console.log(data)
+      
+    } 
+    catch (err) {
+      toast.error(err);
+      
+    }
+  };
  //get all patients 
   const getPatientsData = async () => {
     try {
@@ -273,17 +321,43 @@ const getOngoingAppointment = async () => {
     }
     } else {
       
-      toast.error("No booked  appointments");
+     // toast.error("No booked  appointments");
     }
     
     
   } catch (error) {
-    toast.error("Error booking appointment");
+    //toast.error("Error booking appointment");
     
   }
 };
+//get drugs details by id
+// const  getDrugInfoById = async  ()=> {
+//   try {
+//     const resposne = await axios.post(
+//       "/api/drugs/get-price-by-drug-id",
+//       {
+//         drugId: medicineName
+//       },
 
-console.log("appointment",appointment)
+//       {
+//         headers: {
+//           Authorization: `Bearer ${localStorage.getItem("token")}`,
+//         },
+//       }
+//     );
+//     if (resposne.data.success) {
+//       setDrug(resposne.data.data);
+//       console.log("price",drug.price)
+//     }
+//   } catch (error) {
+    
+//   }
+// };
+
+
+
+
+
 useEffect(() => {
   const getDoctorData = async () => {
     try {
@@ -301,10 +375,8 @@ useEffect(() => {
       );
   
       
-      if (response.data.success) {
+      if(response.data.success) {
         setDoctor(response.data.data);
-        console.log("doctor",)
-        
       }
     } catch (error) {
       console.log(error);
@@ -531,33 +603,59 @@ return(
           </Form.Item>
         </Col>
         </Row>
+        <Row>
+        <Col span={8} xs={24} sm={24} lg={8}>
+          <Form.Item
+            required
+            label="Advices"
+            name="advices"
+            rules={[{ required: false }]}
+          >
+             <Input placeholder="Advices"  onChange={(e)=>(setAdvices(e.target.value))}/>
+          </Form.Item>
+          </Col>
+        </Row>
         <hr />
-        <h2 className="card-title mt-3">Medicines</h2>
+        <h2 className="card-title mt-3 mb-3">Medicines</h2>
        
          { 
             inputList.map( (x,i)=>{
         return(
-        <div>
-          
+        <div key={i}>
+         
+       
+       {console.log("oo",x)}
       <Row gutter={20}>
         <Col span={8} xs={24} sm={24} lg={8}>
+        <h5>Medicine : {i+1}</h5>
           <Form.Item
             required
-            label="Medicine Name"
-            name="medicineName"
+            label=  "Name"
+           
           >
-            <Select  
+            {/* <Select  
+
         allowClear={true}
     placeholder="Select a drug"
     optionFilterProp="children"
-    // onChange={onChange}
-    // onSearch={onSearch}
-    onSelect={onSelectDrug}
+    onChange={(e)=>handleinputchange(e,i)}
+    // onSelect={onSelectDrug}
      options={drugList.map((drug) => ({
+      
   value:  drug._id,
   label: drug.productname,
 }))}
-/>
+/> */}
+
+<select name="medicineName" value={x.medicineName} onChange={(e) => handleinputchange(e, i)}>
+<option >Select an option</option>
+        
+{drugList.map((drug) => (
+   <option  value={drug._id}><p>{drug.productname}</p></option>   
+    
+    ))}
+        
+      </select>
           </Form.Item>
         </Col>
         <Col>
@@ -571,64 +669,56 @@ return(
           <Form.Item
             required
             label="Morning"
-            name="morning"
-            rules={[{ required: true }]}
+            rules={[{ required: false }]}
           >
-            <Input placeholder="Morning" onChange={(e)=>(setMorning(e.target.value))} />
+            <Input placeholder="Morning"  name="morning"  onChange={ e=>handleinputchange(e,i)} />
           </Form.Item>
         </Col>
         <Col span={8} xs={24} sm={24} lg={8}>
           <Form.Item
             required
             label="Afternoon"
-            name="afternoon"
-            rules={[{ required: true }]}
+            rules={[{ required: false }]}
           >
-            <Input placeholder="Afternoon"  onChange={(e)=>(setAfternoon(e.target.value))}/>
+            <Input placeholder="Afternoon" name="afternoon" value={x.afternoon} onChange={ e=>handleinputchange(e,i)}/>
           </Form.Item>
         </Col>
         <Col span={8} xs={24} sm={24} lg={8}>
           <Form.Item
             required
             label="Evening"
-            name="evening"
-            rules={[{ required: true }]}
+            rules={[{ required: false }]}
           >
-            <Input placeholder="Evening"  onChange={(e)=>(setEvening(e.target.value))}/>
+            <Input placeholder="Evening" name="evening" value={x.evening} onChange={ e=>handleinputchange(e,i)}/>
           </Form.Item>
         </Col>
         <Col span={8} xs={24} sm={24} lg={8}>
           <Form.Item
             required
             label="Duration"
-            name="durationDosage"
-            rules={[{ required: true }]}
+            rules={[{ required: false }]}
           >
-            <Input placeholder="Duration" onChange={(e)=>(setDurationDosage(e.target.value))} />
+            <Input placeholder="Duration" name="duration" value={x.duration} onChange={ e=>handleinputchange(e,i)} />
           </Form.Item>
         </Col>
-        <Col span={8} xs={24} sm={24} lg={8}>
-          <Form.Item
-            required
-            label="Advices"
-            name="advices"
-            rules={[{ required: true }]}
-          >
-            <Input placeholder="Advices"  onChange={(e)=>(setAdvices(e.target.value))}/>
-          </Form.Item>
-        </Col>
+        
+           
+         
         </Row>
         
         <div>
         <Row><Col span={8} xs={24} sm={24} lg={8}>
         { inputList.length-1===i && 
-        <Button className="primary-button" onClick={handleaddclick}>Add Medicine</Button>}
+        <Button className="transparent" onClick={()=>handleaddclick(i)}>Add Medicine</Button>}
         </Col>
         
-        <Col span={8} xs={24} sm={24} lg={8}>  {
+        <Col span={8} xs={24} sm={24} lg={8}>
+            {
                   inputList.length!==1 &&
-                  <Button className="primary-button" onClick={handleremove}>Remove Medicine</Button>}
-           </Col></Row></div>
+                  <Button className="transparent" onClick={()=> handleremove(i)}>Remove Medicine</Button>}
+           </Col>
+           </Row>
+           </div>
        
         </div>)})}
         {/* <div className="d-flex justify-content-start">
@@ -641,11 +731,12 @@ return(
     <Row >
       <Col className="gutter-row w-full" span={3}>
       <div className="d-flex justify-content-mid">
-        <Button className="primary-button" htmlType="submit"  >
+        <Button className="primary-button" onClick={() =>{submitHandler(); billDataSending()}}>
           Save Record
         </Button>
       </div>
       </Col>
+      {/* //htmlType="submit"  */}
       <Col className="gutter-row" span={6}>
       <div className="d-flex justify-content-mid w-full">
         <Button className="primary-button" onClick={() => navigate(`/calculateBill/${appointment._id}`)}>
@@ -653,6 +744,7 @@ return(
         </Button>
         {/*  */}
       </div>
+      
       </Col>
       <Col className="gutter-row" span={6}>
      

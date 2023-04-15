@@ -3,7 +3,7 @@ const router = express.Router();
 const Doctor = require("../models/doctorModel");
 const Prescription = require("../models/prescriptionModel")
 const authMiddleware = require("../middlewares/authMiddleware");
-
+const ObjectId = require('mongodb').ObjectId;
 const Drug = require("../models/drugModel");
 
 router.post("/save-drug",  async (req, res) => {
@@ -79,6 +79,25 @@ router.post("/save-drug",  async (req, res) => {
   
    
   });
+
+  router.post("/get-price-by-drug-id", authMiddleware, async (req, res) => {
+
+    try {
+      const drugDetails = await Drug.find({ _id: { $in:[req.body.drugId]}});
+      res.status(200).send({
+        success: true,
+        //{ $in: [ObjectId(req.body.drugId)]}
+        //ObjectId(req.body.drugId)
+        message: "Drug Data fetched successfully",
+        data: drugDetails,
+      });
+    } catch (error) {
+      res
+        .status(500)
+        .send({ message: "Error getting drugs info", success: false, error });
+    }
+  });
+
 
   // router.get("/get-drug-info-by-itemno", async (req, res) => {
   //   try {

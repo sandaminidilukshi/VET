@@ -56,7 +56,7 @@ const prescriptionSchema = new mongoose.Schema(
           {
              
            
-            dosage: {
+           
               medicineName: {
                 type: String,
               },
@@ -77,7 +77,7 @@ const prescriptionSchema = new mongoose.Schema(
               
             duration: {
               type: String,
-            }}}],
+            }}],
        
         advices: 
           {

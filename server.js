@@ -14,6 +14,7 @@ const drugRoute = require  ("./routes/drugRoute");
 const salesRoute = require  ("./routes/salesRoute");
 const receivingRoute = require  ("./routes/receivingRoute");
 const supplierRoute = require  ("./routes/supplierRoute");
+const billRoute = require("./routes/billRoute")
 const path = require("path");
 
 app.use("/api/user", userRoute);
@@ -27,7 +28,7 @@ app.use("/api/drugs", drugRoute)
 app.use("/api/sales", salesRoute)
 app.use("/api/receive", receivingRoute)
 app.use("/api/supplier", supplierRoute)
-
+app.use("/api/bill", billRoute)
 if (process.env.NODE_ENV === "production") {
   app.use("/", express.static("client/build"));
 
