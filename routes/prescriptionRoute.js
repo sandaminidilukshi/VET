@@ -4,7 +4,7 @@ const Doctor = require("../models/doctorModel");
 const Prescription = require("../models/prescriptionModel")
 const authMiddleware = require("../middlewares/authMiddleware");
 const User = require("../models/userModel");
-
+const Bill = require("../models/billModel")
 router.post("/save-prescription", authMiddleware, async (req, res) => {
   try {
     const newPrescription = new Prescription({
@@ -90,6 +90,23 @@ router.post("/get-animal-records-by-animal-ID", async (req, res) => {
 //     });
 //   }
 // });
+
+
+router.post("/get-bill-record-by-bill-id",  async (req, res) => {
+
+  try {
+    const billDetails = await Bill.findById(req.body.billId);
+    res.status(200).send({
+      success: true,
+      message: "Bill Data fetched successfully",
+      data: billDetails,
+    });
+  } catch (error) {
+    res
+      .status(500)
+      .send({ message: "Error getting bill info", success: false, error });
+  }
+});
 
 
 

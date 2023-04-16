@@ -365,7 +365,7 @@ function App() {
             </ProtectedRoute>
           }
         /><Route
-        path="/calculateBill/:userId"
+        path="/calculateBill/:billId"
         element={
           <ProtectedRoute>
             <PaymentCalculation/>

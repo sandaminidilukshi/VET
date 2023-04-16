@@ -87,7 +87,21 @@ router.post("/calculation", authMiddleware, async (req, res) => {
     }
   });
 
+  // router.post("/get-bill-record-by-bill-id",  async (req, res) => {
 
+  //   try {
+  //     const billDetails = await Bill.find(req.body.billId);
+  //     res.status(200).send({
+  //       success: true,
+  //       message: "Bill Data fetched successfully",
+  //       data: billDetails,
+  //     });
+  //   } catch (error) {
+  //     res
+  //       .status(500)
+  //       .send({ message: "Error getting bill info", success: false, error });
+  //   }
+  // });
 
 
 

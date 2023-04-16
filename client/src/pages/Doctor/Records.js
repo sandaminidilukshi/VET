@@ -39,6 +39,7 @@ function Records(medicine) {
   const [drug, setDrug] = useState([])
   const [appointment, setAppointment] = useState([])
   const [bill, setBill] = useState([])
+  const [billId, setBillId] = useState('')
   const [current, setCurrent] = useState(0)
   const [shouldRerender, setShouldRerender] = useState(false);
   const [inputList, setinputList]= useState([{medicineName:'', morning:'',afternoon:'',evening:'',duration:''}]);
@@ -167,6 +168,7 @@ function Records(medicine) {
       );
       if (response.data.success) {
         setBill(response.data.data);
+       
         toast.success("Bill record saved successfully");
         console.log("bill",bill)
       }
@@ -740,7 +742,7 @@ return(
       {/* //htmlType="submit"  */}
       <Col className="gutter-row" span={6}>
       <div className="d-flex justify-content-mid w-full">
-        <Button className="primary-button" onClick={() => navigate(`/calculateBill/appid=${appointment._id}&medicineFee=${bill.medicineFee}&recordId=${bill.recordId}`)}>
+        <Button className="primary-button" onClick={() => navigate(`/calculateBill/${bill._id}`)}>
           Calculate Bill
         </Button>
         {/*  */}
