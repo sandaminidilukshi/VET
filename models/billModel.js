@@ -50,7 +50,7 @@ const billSchema = new mongoose.Schema(
       required: false,
     },
     medicineFee: {
-      type: String,
+      type: Number,
       required: false,
     },
     taxRate: {
@@ -61,7 +61,11 @@ const billSchema = new mongoose.Schema(
       type: String,
       required: false,
     },
-    
+    payment:
+    {
+      type: String,
+      required: false,
+    },
   },
   {
     timestamps: true,

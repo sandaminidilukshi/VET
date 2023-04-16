@@ -166,10 +166,11 @@ function Records(medicine) {
       }
       );
       if (response.data.success) {
-        setBill(response.data);
+        setBill(response.data.data);
         toast.success("Bill record saved successfully");
+        console.log("bill",bill)
       }
-      console.log("bill",bill)
+      
       //console.log(data)
       
     } 
@@ -739,7 +740,7 @@ return(
       {/* //htmlType="submit"  */}
       <Col className="gutter-row" span={6}>
       <div className="d-flex justify-content-mid w-full">
-        <Button className="primary-button" onClick={() => navigate(`/calculateBill/${appointment._id}`)}>
+        <Button className="primary-button" onClick={() => navigate(`/calculateBill/appid=${appointment._id}&medicineFee=${bill.medicineFee}&recordId=${bill.recordId}`)}>
           Calculate Bill
         </Button>
         {/*  */}

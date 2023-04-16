@@ -5,14 +5,15 @@ import toast from "react-hot-toast";
 import { useSelector } from "react-redux";
 import Layout from "../../components/Layout";
 import { Select } from 'antd';
-import { useNavigate } from "react-router-dom";
 import AppointmentsList from "./AppointmentList";
 import moment from "moment";
+import { Navigate, useNavigate, useParams } from "react-router-dom";
 
 function PaymentCalculation(){
 const [consultationFee, setConsultationFee] = useState("")
-const [medicineFee, setMedicineFee] = useState("")
+// const [medicineFee, setMedicineFee] = useState("")
 const [total, setTotal] = useState("")
+const params = useParams();
 
 return(
     <Layout>
@@ -32,12 +33,12 @@ return(
        
         <Col span={8} xs={24} sm={24} lg={8}>
           <Form.Item
-            required
+            
             label="Medicine Fee"
-            name="Medicine Fee"
-            rules={[{ required: true }]}
+            name="medicineFee"
+           
           >
-            <Input placeholder="Medicine Fee" onChange={(e)=>(setMedicineFee(e.target.value))} />
+            <Input readOnly value={params.medicineFee}  />
           </Form.Item>
         </Col>
         <Col span={8} xs={24} sm={24} lg={8}>
