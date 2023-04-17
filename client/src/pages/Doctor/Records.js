@@ -156,7 +156,9 @@ function Records(medicine) {
       doctorId:user?._id,
       recordId:recordId,
       medicines:inputList,
-      
+      medicationFee:'',
+      total:'',
+
       }, 
       
     
@@ -504,7 +506,7 @@ return(
             required
             label="Animal Name"
             name="animalName"
-         
+            rules={[{ required: true }]}
           >
             <Select  
             allowClear={true}
@@ -612,7 +614,7 @@ return(
             required
             label="Advices"
             name="advices"
-            rules={[{ required: false }]}
+            rules={[{ required: true }]}
           >
              <Input placeholder="Advices"  onChange={(e)=>(setAdvices(e.target.value))}/>
           </Form.Item>
@@ -634,7 +636,7 @@ return(
           <Form.Item
             required
             label=  "Name"
-           
+            rules={[{ required: true }]}
           >
             {/* <Select  
 
@@ -672,7 +674,7 @@ return(
           <Form.Item
             required
             label="Morning"
-            rules={[{ required: false }]}
+            rules={[{ required: true }]}
           >
             <Input placeholder="Morning"  name="morning"  onChange={ e=>handleinputchange(e,i)} />
           </Form.Item>
@@ -690,7 +692,7 @@ return(
           <Form.Item
             required
             label="Evening"
-            rules={[{ required: false }]}
+            rules={[{ required: true }]}
           >
             <Input placeholder="Evening" name="evening" value={x.evening} onChange={ e=>handleinputchange(e,i)}/>
           </Form.Item>
@@ -699,7 +701,7 @@ return(
           <Form.Item
             required
             label="Duration"
-            rules={[{ required: false }]}
+            rules={[{ required: true }]}
           >
             <Input placeholder="Duration" name="duration" value={x.duration} onChange={ e=>handleinputchange(e,i)} />
           </Form.Item>

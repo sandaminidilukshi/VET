@@ -9,6 +9,9 @@ import moment from "moment";
 import swal from 'sweetalert';
 function Appointments() {
   const [appointments, setAppointments] = useState([]);
+  const sortedAppointments = appointments.sort((a, b) => {
+    return new Date(b.date) - new Date(a.date);
+  });
   const dispatch = useDispatch();
 
   const getAppointmentsData = async () => {
@@ -164,7 +167,7 @@ function Appointments() {
   return  <Layout>
   <h1 className="page-title">Appointments</h1>
   <hr />
-  <Table columns={columns} dataSource={appointments} />
+  <Table columns={columns} dataSource={sortedAppointments} />
 </Layout>
 }
 

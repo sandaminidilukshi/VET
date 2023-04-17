@@ -1,63 +1,188 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import  Layout  from "../../components/Layout";
-import { Chart } from "react-google-charts";
 import { Card, Col, Row } from "antd";
-
-
-  
- const options = {
-    chart: {
-      title: "Income",
-      subtitle: "Progress",
-      is3D:true,
-      
-    },
-    colors: ["#d9f7be"],
-  };
-
-  export const data1 = [
-    ["Animal Type", "Number for month"],
-    ["Dog", 70],
-    ["Cat", 25],
-    ["Cow", 1],
-    ["Bird", 3],
-    ["Exotic", 7],
-  ];
-  export const data3 = [
-    ["Medicine", "Number for month"],
-    ["Cosequin DS", 70],
-    ["Rimadyl", 25],
-    ["Denamarin", 1],
-    ["Cephalexin Capsules", 3],
-    ["Metronidazole Tablets", 7],
-  ];
-  export const options3 = {
-    title: "For last month",
-  };
-  export const data4 = [
-    ["Visitors", "Number for year"],
-    ["One Time Visitors", 70],
-    ["Frequent Visitors", 100],
-    
-  ];
-  export const options4 = {
-    title: "For last year",
-  
-  };
-
-  export const data2 = [
-    ["Visitors", "Number for month"],
-    ["New  Visitors", 70],
-    ["Returning Visitors", 50],
-    
-  ];
-  export const options2 = {
-    title: "New vs Returning Visitors",
-  };
-  export const options1 = {
-    title: "For Last Month",
-  };
+import ReactApexChart from "react-apexcharts";
+import useFormInstance from "antd/lib/form/hooks/useFormInstance";
+import ApexCharts from "react-apexcharts";
+import Chart from "react-apexcharts";
+import axios from "axios";
 function Dashboard(){
+const [appointments, setAppointments] = useState([])
+const [incomeByMonth, setIncomeByMonth] = useState([]);
+const [users, setUsers] = useState('');
+const [doctors, setDoctors] = useState('')
+const [data, setData] = useState([]);
+const [income, setIncome] = useState('')
+const [chartData, setChartData] = useState([]);
+const [revisitingPercentage, setRevisitingPercentage] = useState(null);
+const [x, setX] = useState([])
+
+
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     const response = await fetch('/api/user/chart-by-appointments-for-the-month');
+  //     const res = await response.json();
+  //     setAppointments(res.data)
+  //     // setX(appointments.map((item) => item.y));
+  //     // console.log("app",x)
+  //   };
+  //   fetchData();
+  // }, []);
+
+
+  
+  
+  const fetchPieChartData = async () => {
+    const response = await axios.get("/api/user/get-all-appointments");
+    setChartData(response.data.data);
+    console.log("appointment",response)
+  };
+
+  const fetchDoctors = async () => {
+    try {
+      const response = await axios.get('/api/user/get-number-of-doctors');
+      setDoctors(response);
+      console.log("doctors",doctors)
+    } catch (error) {
+      console.error(error);
+    }
+  };
+  const fetchUsers = async () => {
+    try {
+      const response = await axios.get('/api/user/get-number-of-users');
+      setUsers(response);
+      console.log("users",users)
+    } catch (error) {
+      console.error(error);
+    }
+  };//.data[0].numUsers
+  
+  const fetchData = async () => {
+    try {
+      const response = await axios.get('/api/bill/income-by-month');
+      setData(response.data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+  
+  const fetchIncome = async () => {
+    try {
+      const response = await axios.get('/api/bill/income-by-month-for-card');
+      setIncome(response);
+      console.log("res",response)
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  useEffect(() => {
+    const fetchMonthlyAppointments = async () => {
+      try {
+        const response = await axios.get("/api/user/chart-by-appointments-for-the-month");
+        setAppointments(response.data);
+      } catch (err) {
+        console.error(err);
+      }
+    };
+    fetchMonthlyAppointments();
+    fetchData();
+    fetchUsers();
+    fetchDoctors();
+    fetchIncome();
+    fetchPieChartData();
+  }, []);
+
+  const filterByStatus = (status) => {
+    return chartData.filter((appointment) => appointment.status === status);
+  };
+  useEffect(() => {
+    axios.get('/api/user/revisiting-percentage')
+      .then(res => setRevisitingPercentage(res.data.revisitingPercentage))
+      .catch(err => console.error(err));
+  }, []);
+  const optionsPie = {
+    chart: {
+      type: "pie",
+    },
+    labels: ["Pending", "Approved", "Cancelled"],
+  };
+
+  const optionsper = {
+    chart: {
+      type: 'radialBar',
+      height: 350,
+    },
+    series: [revisitingPercentage],
+    labels: ['Revisiting Percentage'],
+    colors: ['#20E647'],
+  };
+
+  const seriesPie = [
+    filterByStatus("pending").length,
+    filterByStatus("approved").length,
+    filterByStatus("Cancelled").length,
+  ];
+
+  const options = {
+    chart: {
+      type: "bar",
+      height: 350,
+      toolbar: {
+        show: false,
+      },
+    },
+    xaxis: {
+      categories: appointments.map(
+        ({ _id: { year, month } }) => `${year}-${month.toString().padStart(2, "0")}`
+      ),
+    },
+    yaxis: {
+      title: {
+        text: "Number of Appointments",
+      },
+    },
+  };
+
+  const series = [
+    {
+      name: "Appointments",
+      data: appointments.map(({ count }) => count),
+    },
+  ];
+
+  const optionstot = {
+    chart: {
+      type: "bar",
+      height: 350,
+      toolbar: {
+        show: false,
+      },
+    },
+    xaxis: {
+      categories: data.map(
+        ({ _id: { year, month } }) => `${year}-${month.toString().padStart(2, "0")}`
+      ),
+    },
+    yaxis: {
+      title: {
+        text: "Monthly Income",
+      },
+    },
+  };
+
+  const seriestot = [
+    {
+      name: "Income",
+      data: data.map(({ count }) => count),
+    },
+  ];
+
+
+
+
+
+
 
 return(
     <Layout>
@@ -66,115 +191,62 @@ return(
         <Row gutter={[16, 16]}>
   <Col span={8} >
   <Card className='card-dashboard'>
-    <h4>No of Doctors : 3</h4>
+    <h4>No of Doctors : {doctors.data && doctors.data[0] ? doctors.data[0].numUsers:0}</h4>
     </Card>
     </Col>
     <Col span={8} >
   <Card  className='card-dashboard'>
-    <h4>No of Users : 100</h4>
+    <h4>No of Users :{users.data && users.data[0] ? users.data[0].numUsers:0}</h4>
     </Card>
     </Col>
     <Col span={8} >
   <Card className='card-dashboard'>
-    <h4>Total Income : 30000  </h4> </Card>
+    <h4>Total Income : {income.data && income.data[0] ? income.data[0].count:0}  </h4> </Card>
     </Col>
     </Row><hr />
     </div></div>
     <></>
 
-    <h3>Daily Appointments</h3>
-    <Chart
-      chartType="ColumnChart"
-      width="100%"
-      height="400px"
-      data={[
-        ["Date", 'Appointments'],
-        ["01-11", 15],
-        ["01-12", 20],
-        ["01-13", 25],
-        ["01-14", 30],
-        ["01-15", 21],
-        ["01-16", 28],
-        ["01-17", 27],
-        ["01-18", 15],
-        ["01-19", 21],
-        ["01-20", 13],
-      ]}
-    options={options}
-    />
+    <h3><center>Monthly Appointments</center></h3>
+    {/* <ReactApexChart options={options} series={series} type="line" height={350} /> */}
+    <Chart options={options} series={series} type="bar" height={350} />
+    
 <hr />
-<Row>
-<Col span={8} >
+
+
   
   
-  <h3> Frequent Visitors</h3>
-  <Chart
-      chartType="PieChart"
-      data={data4}
-      options={options4}
-      width={"100%"}
-      height={"400px"}
-    />
+
+  
     
-    </Col>
+  <Row>
 <Col span={8} >
   
     
-<h3>Animals by type</h3>
-<Chart
-      chartType="PieChart"
-      data={data1}
-      options={options1}
-      width={"100%"}
-      height={"400px"}
-    />
+<h3><center>Revisiting Clients</center></h3>
+<Chart options={optionsper} series={optionsper.series} type="radialBar" height={450} />
     
     </Col>
 
-    <Col span={8} >
+    <Col span={16} >
   
 
-<h3>Top Selling Medicines</h3>
-<Chart
-      chartType="PieChart"
-      data={data3}
-      options={options3}
-      width={"100%"}
-      height={"400px"}
-    />
+<h3 style={{marginRight:"50px"}}><center>Appointment Status</center></h3>
+<Chart style={{marginTop:"70px"}} options={optionsPie} series={seriesPie} type="pie" height={300} />
     
     </Col>
     </Row>
-
-    <Row>
+<hr/>
    
-    <h3>Monthly Income</h3>
-    <Chart
-      chartType="ColumnChart"
-      width="100%"
-      height="400px"
-      data={[
-        ["Date", 'Income'],
-        ["January", 50000],
-        ["February", 63000],
-        ["March", 45000],
-        ["April", 70000],
-        ["May", 59000],
-        ["June", 35000],
-        ["July", 45600],
-        ["Aug", 50600],
-        ["Sep", 80000],
-        ["Oct", 65000],
-        ["Nov", 59000],
-        ["Dec", 78000],
-      ]}
-    options={options}
-    />
+   
+    <h3><center>Monthly Income</center></h3>
+    <Chart options={optionstot} series={seriestot} type="bar" height={350} />
+    
 <hr />
   
 
     
-    </Row>
+    
 </Layout>
 )
 

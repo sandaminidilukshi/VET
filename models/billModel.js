@@ -46,7 +46,7 @@ const billSchema = new mongoose.Schema(
         }}],
 
     medicationFee: {
-      type: String,
+      type: Number,
       required: false,
     },
     medicineFee: {
@@ -58,7 +58,7 @@ const billSchema = new mongoose.Schema(
       required: false,
     },
     total: {
-      type: String,
+      type: Number,
       required: false,
     },
     payment:

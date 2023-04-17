@@ -9,6 +9,9 @@ import moment from "moment";
 
 function DoctorAppointments() {
   const [appointments, setAppointments] = useState([]);
+  const sortedAppointments = appointments.sort((a, b) => {
+    return new Date(b.date) - new Date(a.date);
+  });
   const dispatch = useDispatch();
   const getAppointmentsData = async () => {
     try {
@@ -114,7 +117,7 @@ function DoctorAppointments() {
     <Layout>
       <h1 className="page-header">Appointments</h1>
       <hr />
-      <Table columns={columns} dataSource={appointments} />
+      <Table columns={columns} dataSource={sortedAppointments} />
     </Layout>
   );
 }

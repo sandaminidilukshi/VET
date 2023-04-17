@@ -3,6 +3,7 @@ import moment from "moment";
 import React from "react";
 
 function DoctorForm({ onFinish, initivalValues }) {
+  const TenDigitRegex = /^\d{10}$/;
   return (
     <Form
       layout="vertical"
@@ -44,7 +45,10 @@ function DoctorForm({ onFinish, initivalValues }) {
             required
             label="Phone Number"
             name="phoneNumber"
-            rules={[{ required: true }]}
+            rules={[{ required: true ,
+              pattern: TenDigitRegex,
+              message: 'Please enter a 10-digit phone number',
+            }]}
           >
             <Input placeholder="Phone Number" />
           </Form.Item>

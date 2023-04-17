@@ -474,7 +474,7 @@ router.get("/get-appointments-by-user-id", authMiddleware, async (req, res) => {
     });
   }
 });
-router.get("/get-all-appointments", authMiddleware, async (req, res) => {
+router.get("/get-all-appointments",  async (req, res) => {
   try {
     const appointments = await Appointment.find();
     res.status(200).send({
@@ -518,4 +518,107 @@ router.post("/change-appointment-status-by-user-role", authMiddleware, async (re
   }
 });
 
-module.exports = router;
+
+router.get('/chart-by-appointments-for-the-month', async (req, res) => {
+  try {
+    const monthlyAppointments = await Appointment.aggregate([
+      {
+        $match: {
+          status: "approved", // or whichever status you want to count
+        },
+      },
+      {
+        $group: {
+          _id: {
+            year: { $year: { $toDate: "$date" } },
+            month: { $month: { $toDate: "$date" } },
+          },
+          count: { $sum: 1 },
+        },
+      },
+      {
+        $sort: { "_id.year": 1, "_id.month": 1 },
+      },
+    ]);
+    res.json(monthlyAppointments);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Server error" });
+  }
+});
+
+router.get('/get-number-of-users', async (req, res) => {
+  try {
+    const users = await User.aggregate([
+      
+        {
+            $group: {
+                _id: null,
+                numUsers: { $sum: 1 },
+            },
+        },
+    ]);
+    res.json(users);
+  }catch (error) {
+      console.log(error);
+      res.status(500).send({
+        message: "Error changing appointment status",
+        success: false,
+        error,
+      });
+    }})
+
+router.get('/get-number-of-doctors', async (req, res) => {
+      try {
+        const doctors = await Doctor.aggregate([
+          
+            {
+                $group: {
+                    _id: null,
+                    numUsers: { $sum: 1 },
+                },
+            },
+        ]);
+        res.json(doctors);
+      }catch (error) {
+          console.log(error);
+          res.status(500).send({
+            message: "Error changing appointment status",
+            success: false,
+            error,
+          });
+        }})
+
+        router.get("/appointments-by-doctor", async (req, res) => {
+          const appointmentsByDoctor = await Appointment.aggregate([
+            { $match: { status: "approved" } }, // Filter by status if required
+            { $group: { _id: "$doctorId", count: { $sum: 1 } } },
+            { $lookup: { from: "doctors", localField: "_id", foreignField: "_id", as: "doctor" } },
+            { $unwind: "$doctor" },
+            { $project: { doctorName: { $concat: ["$doctor.firstName", " ", "$doctor.lastName"] }, count: 1 } }
+          ]);
+          res.json(appointmentsByDoctor);
+        });
+
+
+        router.get('/revisiting-percentage', async (req, res) => {
+          try {
+            // Group appointments by user ID to count how many times each user has visited the hospital
+            const revisitingUsers = await Appointment.aggregate([
+              { $group: { _id: "$userId", count: { $sum: 1 } } },
+              { $match: { count: { $gt: 1 } } },
+              { $group: { _id: null, revisitingCount: { $sum: 1 } } }
+            ]);
+        
+            // Calculate the percentage of users who have visited the hospital more than once
+            const totalUsers = await Appointment.distinct('userId').count();
+            const revisitingPercentage = (revisitingUsers[0].revisitingCount / totalUsers) * 100;
+        
+            // Return the percentage as a response
+            res.json({ revisitingPercentage });
+          } catch (err) {
+            console.error(err);
+            res.status(500).json({ error: 'Server error' });
+          }
+        });
+module.exports = router;//

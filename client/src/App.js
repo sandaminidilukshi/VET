@@ -45,7 +45,7 @@ import NavigateExpiredUI from "./pages/NavigateExpiredUI";
 import AnimalDetails from "./pages/AnimalDetails";
 import BillingPayment from "./pages/Doctor/BillingPayment"
 import PaymentCalculation from "./pages/Doctor/PaymentCalculation"
-
+import  dashboardNew from "./pages/Admin/dashboardNew"
 function App() {
   const { loading } = useSelector((state) => state.alerts);
   return (

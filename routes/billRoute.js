@@ -24,38 +24,7 @@ router.post("/calculation", authMiddleware, async (req, res) => {
   return Total;
 };
 
-// Then, you can call the function and assign its returned value to the outside Total variable like this:
-// let Total = 0;
-// returnmedi(req.body.medicines).then((result) => {
-//   Total = result;
-//   console.log("Total", Total);
-// });
-    //     let Total = 0;
-      
-        
-    //    const returnmedi = () => { 
-    //       let Total = 0; 
-    //     ( req.body.medicines.map(async(el) => {
-    //     const details = await Drug.findById( el.medicineName );
-    //     if(details){
-    //         // let Total = 0;
-    //         let drugQuantity = parseInt(el.duration)*(parseInt(el.morning) + parseInt(el.afternoon) + parseInt(el.evening))
-    //         let perOneDrug = details.price * drugQuantity
 
-    //         Total = Total + perOneDrug
-        
-    //         console.log("med1",Total)
-           
-    //     }
-      
-    // }))
-    // console.log("med",Total)
-    
-    // ;}
-    
-    //   const medicinePrice = req.body.medicines.map(async (el1) => ({
-    //    const details = await Drug.findOne({ _id: el1.medicineName })
-    // }))
      
     const Total = await returnmedi();
 
@@ -65,8 +34,10 @@ router.post("/calculation", authMiddleware, async (req, res) => {
         doctorId: req.body.doctorId,
         recordId: req.body.recordId,
         medicines: req.body.medicines,
-        medicineFee:Total
-        
+        medicineFee:Total,
+        medicationFee:req.body.medicationFee,
+        total:req.body.total
+
 
   
       });
@@ -87,25 +58,126 @@ router.post("/calculation", authMiddleware, async (req, res) => {
     }
   });
 
-  // router.post("/get-bill-record-by-bill-id",  async (req, res) => {
+  router.post("/add-new-payment-values", authMiddleware, async (req, res) => {
+   
+    try {
+      
+   const bill =   await Bill.findOneAndUpdate({_id:req.body.billId},
+       {
+        medicationFee:req.body.medicationFee,
+        total: req.body.total,
+         
+       }
+       ) ;
+       
+     res.status(200).send({
+       success: true,
+       message: "Bill Updated successfully",
+       data:bill
+     });
+   } catch (error) {
+     res
+       .status(500)
+       .send({ message: "Error updating bill", success: false, error });
+   }
+ 
+  
+ });
 
-  //   try {
-  //     const billDetails = await Bill.find(req.body.billId);
-  //     res.status(200).send({
-  //       success: true,
-  //       message: "Bill Data fetched successfully",
-  //       data: billDetails,
-  //     });
-  //   } catch (error) {
-  //     res
-  //       .status(500)
-  //       .send({ message: "Error getting bill info", success: false, error });
-  //   }
-  // });
+//  router.get('/income-by-month', async (req, res) => {
+//   try {
+//     const incomePermonth = await Bill.aggregate([
+      
+//         {
+//           $group: {
+//               _id: {
+//                 year: { $year: { $toDate: "$updatedAt" } },
+//                 month: { $month: { $toDate: "$updatedAt" } },
+//               },
+//               numOrders: { $sum: 1 },
+//               count: { $sum: "$total" },
+//           }
+//       },
+//       {
+//         $sort: { "_id.year": 1, "_id.month": 1 },
+//       },
+//     ]);
+//     res.json(incomePermonth);
+//   } catch (err) {
+//     console.error(err);
+//     res.status(500).json({ error: "Internal Server error" });
+//   }
+// });
 
 
+router.get('/income-by-month', async (req, res) => {
+  try {
+    const incomePermonth = await Bill.aggregate([
+      
+        {
+          $group: {
+              _id: {
+                year: { $year: { $toDate: "$updatedAt" } },
+                month: { $month: { $toDate: "$updatedAt" } },
+              },
+              numOrders: { $sum: 1 },
+              count: { $sum: "$total" },
+          }
+      },
+      {
+        $sort: { "_id.year": 1, "_id.month": 1 },
+      },
+    ]);
+    res.json(incomePermonth);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Internal Server error" });
+  }
+});
 
 
+router.get('/income-by-month-for-card', async (req, res) => {
+  try {
+    const incomePermonth = await Bill.aggregate([
+      
+        {
+          $group: {
+              _id: {
+                year: { $year: new Date() },
+                month: { $month: new Date() },
+              },
+              numOrders: { $sum: 1 },
+              count: { $sum: "$total" },
+          }
+      },
+      {
+        $sort: { "_id.year": 1, "_id.month": 1 },
+      },
+    ]);
+    res.json(incomePermonth);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Internal Server error" });
+  }
+});
+
+router.get("/get-all-bills", async (req, res) => {
+  try {
+    const bills = await Bill.find();
+    res.status(200).send({
+      message: "Bills fetched successfully",
+      success: true,
+      data: bills,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({
+      message: "Error getting bills",
+      success: false,
+      error,
+    });
+  }
+});
 
 
 module.exports = router;

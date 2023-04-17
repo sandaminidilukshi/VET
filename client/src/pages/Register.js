@@ -7,6 +7,7 @@ import toast from "react-hot-toast";
 import { hideLoading, showLoading } from "../redux/alertsSlice";
 
 function Register() {
+  const TenDigitRegex = /^\d{10}$/;
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const onFinish = async (values) => {
@@ -34,7 +35,11 @@ function Register() {
           <Form.Item label="Name" name="name">
             <Input placeholder="Name" />
           </Form.Item>
-          <Form.Item label="Phone Number" name="phoneno">
+          <Form.Item label="Phone Number" name="phoneno"  rules={[
+    {
+      pattern: TenDigitRegex,
+      message: 'Please enter a 10-digit phone number',
+    }]}>
             <Input placeholder="Phone Number" type="number" />
           </Form.Item>
 
